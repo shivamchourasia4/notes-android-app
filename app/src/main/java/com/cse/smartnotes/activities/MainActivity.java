@@ -49,14 +49,27 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
                 new StaggeredGridLayoutManager(2,
                         StaggeredGridLayoutManager.VERTICAL)
         );
-        
-        // Quick Actions Working
+
+        // Quick Actions checklist
         View quickActions =  findViewById(R.id.layoutQuickActions);
         View nav = quickActions.findViewById(R.id.checkLists);
         nav.setOnClickListener(view -> {
             Toast.makeText(this, "Clicked!!!", Toast.LENGTH_SHORT).show();
         });
-        
+
+        // Quick Actions ML Scanner
+        View textScan = quickActions.findViewById(R.id.imageToText);
+        textScan.setOnClickListener(view -> {
+            Intent i = new Intent(MainActivity.this, ScannerActivity.class);
+            startActivityForResult(new Intent(getApplicationContext(), ScannerActivity.class), REQUEST_CODE_ADD_NOTE);
+        });
+
+        // Quick Actions ML Speech
+        View speechScan = quickActions.findViewById(R.id.speech);
+        speechScan.setOnClickListener(view -> {
+            Intent i = new Intent(MainActivity.this, SpeechActivity.class);
+            startActivityForResult(new Intent(getApplicationContext(), SpeechActivity.class), REQUEST_CODE_ADD_NOTE);
+        });
 
         noteList = new ArrayList<>();
         notesAdapter = new NotesAdapter(noteList, this);
@@ -168,5 +181,4 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
             }
         }
     }
-
 }

@@ -1,6 +1,7 @@
 package com.cse.smartnotes.activities;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -16,6 +17,7 @@ import android.provider.MediaStore;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -60,6 +62,8 @@ public class CreateNoteActivity extends AppCompatActivity {
         binding.imageBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                mgr.hideSoftInputFromWindow(binding.inputNote.getWindowToken(), 0);
                 onBackPressed();
             }
         });
@@ -84,6 +88,10 @@ public class CreateNoteActivity extends AppCompatActivity {
             setViewOrUpdateNote();
         }
 
+        if(getIntent().getStringExtra("capturedForNote") != null){
+            binding.inputNote.setText(getIntent().getStringExtra("capturedForNote"));
+        }
+
         binding.removeWebURL.setOnClickListener(view -> {
             binding.textWebURL.setText(null);
             binding.layoutWebURL.setVisibility(View.GONE);
@@ -99,7 +107,14 @@ public class CreateNoteActivity extends AppCompatActivity {
         initTools();
         setSubtitleIndicatorColor();
     }
-
+//    @Override
+//    public void onBackPressed() {
+//        Intent intent;
+//        intent = new Intent(this, MainActivity.class);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        finish();
+//        startActivity(intent);
+//    }
     private void setViewOrUpdateNote() {
         binding.inputNoteTitle.setText(alreadyAvailableNote.getTitle());
         binding.inputNoteSubtitle.setText(alreadyAvailableNote.getSubtitle());
@@ -127,6 +142,8 @@ public class CreateNoteActivity extends AppCompatActivity {
             Toast.makeText(this, "Note can't be empty", Toast.LENGTH_SHORT).show();
             return;
         }
+        InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        mgr.hideSoftInputFromWindow(binding.inputNote.getWindowToken(), 0);
 
         final Note note = new Note();
         note.setTitle(binding.inputNoteTitle.getText().toString());

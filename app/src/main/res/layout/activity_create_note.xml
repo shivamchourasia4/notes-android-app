@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
+    android:id="@+id/noteContainer"
     tools:context=".activities.CreateNoteActivity">
 
     <ScrollView
@@ -28,8 +29,22 @@
                 android:layout_marginEnd="@dimen/_12sdp"
                 android:contentDescription="@string/app_name"
                 android:src="@drawable/ic_back"
-                android:tint="@color/colorIcons"
+                android:tint="@color/colorAccent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textDateTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/raleway_regular"
+                android:gravity="center_horizontal"
+                android:includeFontPadding="false"
+                android:textColor="@color/colorSecondary"
+                android:textSize="@dimen/_12ssp"
+                app:layout_constraintBottom_toTopOf="@+id/inputNoteTitle"
+                app:layout_constraintEnd_toStartOf="@+id/imageSave"
+                app:layout_constraintStart_toEndOf="@+id/imageBack"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
@@ -41,7 +56,7 @@
                 android:contentDescription="@string/app_name"
                 android:padding="@dimen/_4sdp"
                 android:src="@drawable/ic_baseline_done"
-                android:tint="@color/colorIcons"
+                android:tint="@color/colorAccent"
                 app:layout_constraintBottom_toBottomOf="@+id/imageBack"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/imageBack" />
@@ -54,62 +69,48 @@
                 android:layout_marginTop="@dimen/_15sdp"
                 android:layout_marginEnd="@dimen/_12sdp"
                 android:background="@null"
-                android:fontFamily="@font/poppins_bold"
+                android:fontFamily="@font/raleway_bold"
                 android:hint="@string/note_title"
                 android:imeOptions="actionDone"
                 android:importantForAutofill="no"
                 android:includeFontPadding="false"
                 android:inputType="text"
-                android:textColor="@color/white"
-                android:textColorHint="@color/colorTextHint"
+                android:textColor="@color/black"
+                android:textColorHint="@color/colorHint"
                 android:textSize="@dimen/_16sdp"
                 app:layout_constraintTop_toBottomOf="@+id/imageBack" />
 
-            <TextView
-                android:id="@+id/textDateTime"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_regular"
-                android:includeFontPadding="false"
-                android:textColor="@color/colorIcons"
-                android:textSize="@dimen/_10ssp"
-                app:layout_constraintEnd_toEndOf="@+id/inputNoteTitle"
-                app:layout_constraintStart_toStartOf="@+id/inputNoteTitle"
-                app:layout_constraintTop_toBottomOf="@+id/inputNoteTitle" />
 
             <EditText
                 android:id="@+id/inputNoteSubtitle"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_12sdp"
                 android:layout_marginTop="@dimen/_15sdp"
-                android:layout_marginEnd="@dimen/_12sdp"
                 android:background="@null"
-                android:fontFamily="@font/poppins_light"
+                android:fontFamily="@font/raleway_light"
                 android:hint="@string/note_subtitle"
                 android:importantForAutofill="no"
                 android:includeFontPadding="false"
                 android:inputType="textMultiLine"
-                android:paddingTop="@dimen/_8sdp"
                 android:paddingBottom="@dimen/_8sdp"
-                android:textColor="@color/colorTextSubtitle"
-                android:textColorHint="@color/colorTextHint"
-                android:textSize="@dimen/_13sdp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/viewSubtitleIndicator"
-                app:layout_constraintTop_toBottomOf="@+id/textDateTime"
-                />
+                android:textColor="@color/colorAccent"
+                android:textColorHint="@color/colorHint"
+                android:textSize="@dimen/_14sdp"
+                app:layout_constraintEnd_toEndOf="@+id/inputNoteTitle"
+                app:layout_constraintStart_toStartOf="@+id/inputNoteTitle"
+                app:layout_constraintTop_toBottomOf="@+id/inputNoteTitle" />
 
-            <View
-                android:id="@+id/viewSubtitleIndicator"
-                android:layout_width="@dimen/_5sdp"
-                android:layout_height="0dp"
-                android:layout_marginStart="@dimen/_12sdp"
-                android:background="@drawable/background_subtitle_indicator"
-                app:layout_constraintBottom_toBottomOf="@id/inputNoteSubtitle"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/inputNoteSubtitle"
-                />
+<!--            <View-->
+<!--                android:id="@+id/viewSubtitleIndicator"-->
+<!--                android:layout_width="@dimen/_5sdp"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:layout_marginStart="@dimen/_12sdp"-->
+<!--                android:background="@drawable/background_subtitle_indicator"-->
+<!--                app:layout_constraintBottom_toBottomOf="@id/inputNoteSubtitle"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="@+id/inputNoteSubtitle"-->
+<!--                />-->
 
             <ImageView
                 android:id="@+id/imageNote"
@@ -129,10 +130,10 @@
                 android:layout_height="@dimen/_25sdp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
-                android:background="@drawable/background_delete"
+                android:background="@color/colorSecondary"
                 android:contentDescription="@string/app_name"
                 android:padding="@dimen/_4sdp"
-                android:src="@drawable/ic_baseline_delete_24"
+                android:src="@drawable/ic_baseline_delete"
                 android:tint="@color/white"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="@id/imageNote"
@@ -156,9 +157,9 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:autoLink="web"
-                        android:fontFamily="@font/poppins_regular"
+                        android:fontFamily="@font/raleway_regular"
                         android:includeFontPadding="false"
-                        android:textSize="@dimen/_13ssp"
+                        android:textSize="@dimen/_16ssp"
                         />
 
                     <ImageView
@@ -166,7 +167,7 @@
                         android:layout_width="@dimen/_20sdp"
                         android:layout_height="@dimen/_20sdp"
                         android:contentDescription="@string/app_name"
-                        android:src="@drawable/ic_baseline_delete_24"
+                        android:src="@drawable/ic_baseline_delete"
                         android:tint="@color/colorNoteColor3"/>
 
 
@@ -181,16 +182,16 @@
                 android:layout_marginEnd="@dimen/_12sdp"
                 android:layout_marginBottom="@dimen/_15sdp"
                 android:background="@null"
-                android:fontFamily="@font/poppins_regular"
+                android:fontFamily="@font/raleway_regular"
                 android:gravity="top"
                 android:hint="@string/type_note_here"
                 android:importantForAutofill="no"
                 android:includeFontPadding="false"
                 android:inputType="textMultiLine"
                 android:minHeight="@dimen/_100sdp"
-                android:textColor="@color/white"
-                android:textColorHint="@color/colorTextHint"
-                android:textSize="@dimen/_13sdp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/colorHint"
+                android:textSize="@dimen/_14sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/layoutWebURL"
                 />

@@ -16,7 +16,7 @@
         android:layout_marginEnd="@dimen/_12sdp"
         android:contentDescription="@string/app_name"
         android:src="@drawable/ic_back"
-        android:tint="@color/colorIcons"
+        android:tint="@color/colorSecondary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -30,7 +30,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.173"
-        app:srcCompat="@drawable/ic_baseline_image" />
+        app:srcCompat="@drawable/ic_secondary_image"
+        android:background="@drawable/background_search"
+        />
 
 
     <Button
@@ -41,11 +43,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintVertical_bias="0.426"
-        android:layout_margin="30dp"
+        app:layout_constraintVertical_bias="0"
+        android:layout_margin="80dp"
         android:text="Snap"
         android:textAllCaps="false"
-        android:background="@drawable/background_search"
+        android:background="@drawable/background_button"
         app:backgroundTint="@color/colorAccent"/>
 
     <Button
@@ -56,12 +58,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/snapBtn"
-        app:layout_constraintVertical_bias="0.315"
+        app:layout_constraintVertical_bias="0"
         android:background="@drawable/background_search"
-        android:layout_margin="30dp"
+        android:layout_margin="80dp"
         android:text="Detect Text From Image"
         android:textAllCaps="false"
-        app:backgroundTint="@color/green"/>
+        app:backgroundTint="@color/craneRed"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

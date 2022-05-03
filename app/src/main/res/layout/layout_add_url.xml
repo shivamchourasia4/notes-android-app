@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:layout_margin="@dimen/_10sdp"
-    android:background="@drawable/background_dialog"
+    android:background="@drawable/background_search"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
@@ -16,7 +16,7 @@
         android:layout_marginTop="@dimen/_8sdp"
         android:contentDescription="@string/app_name"
         android:src="@drawable/ic_baseline_web"
-        android:tint="@color/white"
+        android:tint="@color/colorSecondary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_8sdp"
         android:layout_marginEnd="@dimen/_8sdp"
-        android:fontFamily="@font/poppins_bold"
+        android:fontFamily="@font/raleway_bold"
         android:includeFontPadding="false"
         android:text="@string/add_url"
         android:textColor="@color/white"
@@ -44,7 +44,7 @@
         android:layout_marginTop="@dimen/_8sdp"
         android:layout_marginEnd="@dimen/_8sdp"
         android:background="@null"
-        android:fontFamily="@font/poppins_regular"
+        android:fontFamily="@font/raleway_regular"
         android:gravity="center_vertical"
         android:hint="@string/enter_url"
         android:textColor="@color/white"
@@ -64,7 +64,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/_8sdp"
         android:layout_marginBottom="@dimen/_8sdp"
-        android:fontFamily="@font/poppins_regular"
+        android:fontFamily="@font/raleway_regular"
         android:includeFontPadding="false"
         android:padding="@dimen/_8sdp"
         android:text="@string/add"
@@ -80,7 +80,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/_8sdp"
         android:layout_marginBottom="@dimen/_8sdp"
-        android:fontFamily="@font/poppins_regular"
+        android:fontFamily="@font/raleway_regular"
         android:includeFontPadding="false"
         android:padding="@dimen/_8sdp"
         android:text="Cancel"

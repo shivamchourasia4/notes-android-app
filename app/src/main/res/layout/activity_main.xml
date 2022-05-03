@@ -36,6 +36,7 @@
         android:paddingTop="@dimen/_4sdp"
         android:paddingEnd="@dimen/_16sdp"
         android:paddingBottom="@dimen/_4sdp"
+        android:elevation="4dp"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
@@ -43,7 +44,7 @@
             android:layout_height="@dimen/_24sdp"
             android:contentDescription="@string/app_name"
             android:src="@drawable/ic_baseline_search"
-            android:tint="@color/colorSearchIcon" />
+            android:tint="@color/colorSecondary" />
 
         <EditText
             android:id="@+id/inputSearch"
@@ -52,14 +53,15 @@
             android:layout_marginStart="@dimen/_8sdp"
             android:layout_marginEnd="@dimen/_8sdp"
             android:background="@null"
-            android:fontFamily="@font/poppins_regular"
+            android:fontFamily="@font/raleway_regular"
             android:hint="@string/search_notes"
             android:imeOptions="actionDone"
             android:importantForAutofill="no"
             android:inputType="text"
-            android:textColor="@color/white"
-            android:textColorHint="@color/colorTextHint"
-            android:textSize="@dimen/_14ssp" />
+            android:textColor="@color/colorSecondary"
+            android:textColorHint="@color/colorAccent"
+            android:textSize="@dimen/_14ssp"
+            android:textCursorDrawable="@drawable/color_cursor"/>
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -81,14 +83,15 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/layoutQuickActions"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
 
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/layoutQuickActionsNav"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:backgroundTint="@color/colorQuickActionBackground"
+            android:backgroundTint="@color/colorAccent"
             app:fabAlignmentMode="end"
             app:fabCradleMargin="@dimen/_10sdp"
             app:fabCradleRoundedCornerRadius="@dimen/_24sdp"
@@ -139,10 +142,11 @@
             android:layout_margin="@dimen/_16sdp"
             android:elevation="@dimen/_8sdp"
             android:src="@drawable/ic_baseline_add"
-            app:backgroundTint="@color/colorQuickActionBackground"
+            app:backgroundTint="@color/colorAccent"
             app:layout_anchor="@id/layoutQuickActionsNav"
             app:maxImageSize="@dimen/_24sdp"
-            app:tint="@color/white" />
+            app:tint="@color/colorPrimary"
+            android:contentDescription="Add Note" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <!--    <ImageView-->

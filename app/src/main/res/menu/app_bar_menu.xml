@@ -4,18 +4,18 @@
 
     <item
         android:id="@+id/checkLists"
-        android:icon="@drawable/ic_baseline_check_box_24"
+        android:icon="@drawable/ic_baseline_check_box"
         android:title="CheckLists"
         app:showAsAction="always"/>
     <item
         android:id="@+id/draw"
-        android:icon="@drawable/ic_baseline_brush_24"
+        android:icon="@drawable/ic_baseline_brush"
         android:title="Draw"
         app:showAsAction="always"/>
 
     <item
         android:id="@+id/speech"
-        android:icon="@drawable/ic_baseline_mic_none_24"
+        android:icon="@drawable/ic_baseline_mic_none"
         android:title="Speech"
         app:showAsAction="always"/>
     <item

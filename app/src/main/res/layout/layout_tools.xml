@@ -13,12 +13,12 @@
         android:id="@+id/textTools"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_40sdp"
-        android:fontFamily="@font/poppins_regular"
+        android:fontFamily="@font/raleway_regular"
         android:gravity="center"
         android:includeFontPadding="false"
         android:text="@string/tools"
         android:textColor="@color/white"
-        android:textSize="@dimen/_13ssp" />
+        android:textSize="@dimen/_14ssp" />
 
     <LinearLayout
         android:id="@+id/layoutNoteColor"
@@ -46,7 +46,7 @@
                 android:contentDescription="@string/app_name"
                 android:padding="@dimen/_10sdp"
                 android:src="@drawable/ic_baseline_done"
-                android:tint="@color/white" />
+                android:tint="@color/black" />
         </FrameLayout>
 
         <FrameLayout
@@ -66,7 +66,7 @@
                 android:layout_height="@dimen/_35sdp"
                 android:contentDescription="@string/app_name"
                 android:padding="@dimen/_10sdp"
-                android:tint="@color/white" />
+                android:tint="@color/black" />
         </FrameLayout>
 
         <FrameLayout
@@ -86,7 +86,7 @@
                 android:layout_height="@dimen/_35sdp"
                 android:contentDescription="@string/app_name"
                 android:padding="@dimen/_10sdp"
-                android:tint="@color/white" />
+                android:tint="@color/black" />
         </FrameLayout>
 
         <FrameLayout
@@ -106,7 +106,7 @@
                 android:layout_height="@dimen/_35sdp"
                 android:contentDescription="@string/app_name"
                 android:padding="@dimen/_10sdp"
-                android:tint="@color/white" />
+                android:tint="@color/black" />
         </FrameLayout>
 
         <FrameLayout
@@ -126,17 +126,17 @@
                 android:layout_height="@dimen/_35sdp"
                 android:contentDescription="@string/app_name"
                 android:padding="@dimen/_10sdp"
-                android:tint="@color/white" />
+                android:tint="@color/black" />
         </FrameLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_light"
+            android:fontFamily="@font/raleway_light"
             android:includeFontPadding="false"
             android:text="@string/pick_color"
             android:textColor="@color/white"
-            android:textSize="@dimen/_13ssp" />
+            android:textSize="@dimen/_14ssp" />
 
     </LinearLayout>
 
@@ -153,17 +153,17 @@
             android:layout_height="@dimen/_22sdp"
             android:contentDescription="@string/app_name"
             android:src="@drawable/ic_baseline_image"
-            android:tint="@color/colorIcons" />
+            android:tint="@color/colorPrimary" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_10sdp"
-            android:fontFamily="@font/poppins_regular"
+            android:fontFamily="@font/raleway_regular"
             android:includeFontPadding="false"
             android:text="@string/add_image"
-            android:textColor="@color/colorIcons"
-            android:textSize="@dimen/_12ssp" />
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/_14ssp" />
     </LinearLayout>
 
     <LinearLayout
@@ -181,48 +181,74 @@
             android:layout_height="@dimen/_22sdp"
             android:contentDescription="@string/app_name"
             android:src="@drawable/ic_baseline_web"
-            android:tint="@color/colorIcons" />
+            android:tint="@color/colorPrimary" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_10sdp"
-            android:fontFamily="@font/poppins_regular"
+            android:fontFamily="@font/raleway_regular"
             android:includeFontPadding="false"
             android:text="@string/add_url"
-            android:textColor="@color/colorIcons"
-            android:textSize="@dimen/_12ssp" />
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/_14ssp" />
+    </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/layoutAddReminder"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_35sdp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
+        <ImageView
+            android:layout_width="@dimen/_22sdp"
+            android:layout_height="@dimen/_22sdp"
+            android:contentDescription="@string/reminder"
+            android:src="@drawable/ic_baseline_notifications"
+            android:tint="@color/colorPrimary" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:fontFamily="@font/raleway_regular"
+            android:includeFontPadding="false"
+            android:text="@string/reminder"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/_14ssp" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/layoutDeleteNote"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_35sdp"
-        android:layout_gravity="center_vertical"
         android:layout_marginStart="@dimen/_10sdp"
         android:layout_marginEnd="@dimen/_10sdp"
         android:layout_marginBottom="@dimen/_10sdp"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <ImageView
             android:layout_width="@dimen/_22sdp"
             android:layout_height="@dimen/_22sdp"
             android:contentDescription="@string/app_name"
-            android:src="@drawable/ic_baseline_delete_24"
-            android:tint="@color/colorNoteColor3" />
+            android:src="@drawable/ic_baseline_delete"
+            android:tint="@color/craneRed" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_10sdp"
-            android:fontFamily="@font/poppins_regular"
+            android:fontFamily="@font/raleway_regular"
             android:includeFontPadding="false"
             android:text="@string/delete_note"
-            android:textColor="@color/colorNoteColor3"
-            android:textSize="@dimen/_12sdp" />
+            android:textColor="@color/craneRed"
+            android:textSize="@dimen/_14sdp" />
     </LinearLayout>
 
 

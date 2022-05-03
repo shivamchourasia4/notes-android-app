@@ -1,7 +1,12 @@
 package com.cse.smartnotes.activities;
 
 import android.Manifest;
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -9,9 +14,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Patterns;
@@ -31,27 +36,34 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.cse.smartnotes.R;
+import com.cse.smartnotes.broadcast.ReminderBroadcast;
 import com.cse.smartnotes.database.NotesDatabase;
 import com.cse.smartnotes.databinding.ActivityCreateNoteBinding;
 import com.cse.smartnotes.entities.Note;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class CreateNoteActivity extends AppCompatActivity {
+//
+public class CreateNoteActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
+    public static final int SELECT_PICTURE = 200;
     private static final int REQUEST_CODE_STORAGE_PERMISSION = 1;
     private static final int REQUEST_CODE_SELECT_IMAGE = 2;
-    public static final int SELECT_PICTURE = 200;
     ActivityCreateNoteBinding binding;
+    Calendar now = Calendar.getInstance();
     private String selectedNoteColor;
     private String selectedImagePath;
     private AlertDialog dialogAddURL;
     private AlertDialog dialogDeleteNote;
-
+    private TimePickerDialog tpd;
+    private DatePickerDialog dpd;
     private Note alreadyAvailableNote;
 
     @Override
@@ -69,18 +81,13 @@ public class CreateNoteActivity extends AppCompatActivity {
         });
 
         binding.textDateTime.setText(
-                new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm a", Locale.getDefault())
+                new SimpleDateFormat("dd MMMM, yyyy", Locale.getDefault())
                         .format(new Date())
         );
 
-        binding.imageSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                saveNote();
-            }
-        });
+        binding.imageSave.setOnClickListener(view -> saveNote());
 
-        selectedNoteColor = "#333333";
+        selectedNoteColor = "#FFFFFFFF";
         selectedImagePath = "";
 
         if (getIntent().getBooleanExtra("isViewOrUpdate", false)) {
@@ -88,7 +95,7 @@ public class CreateNoteActivity extends AppCompatActivity {
             setViewOrUpdateNote();
         }
 
-        if(getIntent().getStringExtra("capturedForNote") != null){
+        if (getIntent().getStringExtra("capturedForNote") != null) {
             binding.inputNote.setText(getIntent().getStringExtra("capturedForNote"));
         }
 
@@ -105,9 +112,10 @@ public class CreateNoteActivity extends AppCompatActivity {
         });
 
         initTools();
-        setSubtitleIndicatorColor();
+        setNoteBackgroundColor();
     }
-//    @Override
+
+    //    @Override
 //    public void onBackPressed() {
 //        Intent intent;
 //        intent = new Intent(this, MainActivity.class);
@@ -206,67 +214,67 @@ public class CreateNoteActivity extends AppCompatActivity {
         final ImageView imageColor5 = layoutTools.findViewById(R.id.imageColor5);
 
         layoutTools.findViewById(R.id.viewColor1).setOnClickListener(view -> {
-            selectedNoteColor = "#333333";
+            selectedNoteColor = "#FFFFFFFF";
             imageColor1.setImageResource(R.drawable.ic_baseline_done);
             imageColor2.setImageResource(0);
             imageColor3.setImageResource(0);
             imageColor4.setImageResource(0);
             imageColor5.setImageResource(0);
-            setSubtitleIndicatorColor();
+            setNoteBackgroundColor();
         });
 
         layoutTools.findViewById(R.id.viewColor2).setOnClickListener(view -> {
-            selectedNoteColor = "#FDBE3B";
+            selectedNoteColor = "#fff59d";
             imageColor2.setImageResource(R.drawable.ic_baseline_done);
             imageColor1.setImageResource(0);
             imageColor3.setImageResource(0);
             imageColor4.setImageResource(0);
             imageColor5.setImageResource(0);
-            setSubtitleIndicatorColor();
+            setNoteBackgroundColor();
         });
 
         layoutTools.findViewById(R.id.viewColor3).setOnClickListener(view -> {
-            selectedNoteColor = "#FF4842";
+            selectedNoteColor = "#ffccbc";
             imageColor3.setImageResource(R.drawable.ic_baseline_done);
             imageColor2.setImageResource(0);
             imageColor1.setImageResource(0);
             imageColor4.setImageResource(0);
             imageColor5.setImageResource(0);
-            setSubtitleIndicatorColor();
+            setNoteBackgroundColor();
         });
 
         layoutTools.findViewById(R.id.viewColor4).setOnClickListener(view -> {
-            selectedNoteColor = "#3A52FC";
+            selectedNoteColor = "#b3e5fc";
             imageColor4.setImageResource(R.drawable.ic_baseline_done);
             imageColor2.setImageResource(0);
             imageColor3.setImageResource(0);
             imageColor1.setImageResource(0);
             imageColor5.setImageResource(0);
-            setSubtitleIndicatorColor();
+            setNoteBackgroundColor();
         });
 
         layoutTools.findViewById(R.id.viewColor5).setOnClickListener(view -> {
-            selectedNoteColor = "#000000";
+            selectedNoteColor = "#e1bee7";
             imageColor5.setImageResource(R.drawable.ic_baseline_done);
             imageColor2.setImageResource(0);
             imageColor3.setImageResource(0);
             imageColor4.setImageResource(0);
             imageColor1.setImageResource(0);
-            setSubtitleIndicatorColor();
+            setNoteBackgroundColor();
         });
 
         if (alreadyAvailableNote != null && alreadyAvailableNote.getColor() != null && !alreadyAvailableNote.getColor().trim().isEmpty()) {
             switch (alreadyAvailableNote.getColor()) {
-                case "#FDBE3B":
+                case "#fff59d":
                     layoutTools.findViewById(R.id.viewColor2).performClick();
                     break;
-                case "#FF4842":
+                case "#ffccbc":
                     layoutTools.findViewById(R.id.viewColor3).performClick();
                     break;
-                case "#3A52FC":
+                case "#b3e5fc":
                     layoutTools.findViewById(R.id.viewColor4).performClick();
                     break;
-                case "#000000":
+                case "#e1bee7":
                     layoutTools.findViewById(R.id.viewColor5).performClick();
                     break;
             }
@@ -285,12 +293,53 @@ public class CreateNoteActivity extends AppCompatActivity {
                 selectImage();
             }
         });
-        layoutTools.findViewById(R.id.layoutAddUrl).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                showAddURLDialog();
-            }
+        layoutTools.findViewById(R.id.layoutAddUrl).setOnClickListener(view -> {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            showAddURLDialog();
+        });
+        layoutTools.findViewById(R.id.layoutAddReminder).setOnClickListener(view -> {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            dpd = DatePickerDialog.newInstance(
+                    CreateNoteActivity.this,
+                    now.get(Calendar.YEAR),
+                    now.get(Calendar.MONTH),
+                    now.get(Calendar.DAY_OF_MONTH)
+            );
+
+            tpd = TimePickerDialog.newInstance(
+                    CreateNoteActivity.this,
+                    now.get(Calendar.HOUR_OF_DAY),
+                    now.get(Calendar.MINUTE),
+                    now.get(Calendar.SECOND),
+                    false
+            );
+            dpd.setAccentColor("#4E0D3A");
+            tpd.setAccentColor("#4E0D3A");
+            dpd.setMinDate(Calendar.getInstance());
+//            Toast.makeText(this, "now: "+Calendar.getInstance().get(Calendar.HOUR_OF_DAY)+ Calendar.getInstance().get(Calendar.MINUTE), Toast.LENGTH_LONG).show();
+            tpd.setMinTime(Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), 0);
+            dpd.show(getSupportFragmentManager(), "Datepickerdialog");
+
+
+            createNotificationChannel();
+
+//            Toast.makeText(this, "Reminder Set Successfully!", Toast.LENGTH_SHORT).show();
+//
+//            Intent intent = new Intent(getApplicationContext(), Notification.class);
+//            intent.putExtra("titleExtra", binding.inputNoteTitle.getText().toString());
+//            intent.putExtra("messageExtra", binding.inputNoteSubtitle.getText().toString());
+//
+//            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+//
+//            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+//
+//            long timeAtButtonClick = System.currentTimeMillis();
+//            long tenSecondInMillis = 1000 * 5;
+//
+//            alarmManager.set(AlarmManager.RTC_WAKEUP,
+//                    timeAtButtonClick + tenSecondInMillis, pendingIntent);
+
+//            callPickers();
         });
 
         if (alreadyAvailableNote != null) {
@@ -301,6 +350,154 @@ public class CreateNoteActivity extends AppCompatActivity {
             });
 
         }
+    }
+
+    // pick date and time
+//    private void callPickers() {
+//        MaterialDatePicker materialDatePicker = MaterialDatePicker.Builder.datePicker()
+//                .setTitleText("Select Date")
+//                .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+//                .build();
+//
+//        materialDatePicker.show(getSupportFragmentManager(), "DatePickerDialog");
+//        materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {
+//            @Override
+//            public void onPositiveButtonClick(Long selection) {
+//                Calendar calendar = Calendar.getInstance();
+//                calendar.setTimeInMillis(selection);
+//                Toast.makeText(CreateNoteActivity.this, "picker: "+calendar.getTime(), Toast.LENGTH_SHORT).show();
+//
+//                MaterialTimePicker materialTimePicker = new MaterialTimePicker.Builder()
+//                        .setTitleText("Select A Time")
+//                        .setHour(LocalDateTime.now().getHour())
+//                        .setMinute(LocalDateTime.now().getMinute())
+//                        .build();
+//
+//                materialTimePicker.show(getSupportFragmentManager(), "TimePickerDialog");
+//                materialTimePicker.addOnPositiveButtonClickListener(v -> {
+//                    calendar.set(Calendar.HOUR_OF_DAY, materialTimePicker.getHour());
+//                    calendar.set(Calendar.MINUTE, materialTimePicker.getMinute());
+//                    calendar.set(Calendar.SECOND, 0);
+//
+//                    if (binding.inputNoteTitle.getText().toString().trim().isEmpty()) {
+//                        Toast.makeText(CreateNoteActivity.this, "Note title can't be empty!", Toast.LENGTH_SHORT).show();
+//                        return;
+//                    } else if (binding.inputNoteSubtitle.getText().toString().trim().isEmpty() && binding.inputNote.getText().toString().trim().isEmpty()) {
+//                        Toast.makeText(CreateNoteActivity.this, "Note can't be empty", Toast.LENGTH_SHORT).show();
+//                        return;
+//                    }
+//
+//                    Toast.makeText(CreateNoteActivity.this, "now: "
+//                            + calendar.getTime(), Toast.LENGTH_SHORT).show();
+//                    Long reminderInMillisec = calendar.getTimeInMillis();
+//
+//                    //show Alert
+//                    showAlertForReminderConfirm(reminderInMillisec, binding.inputNoteTitle.getText().toString(), binding.inputNoteSubtitle.getText().toString());
+//                });
+//
+//            }
+//        });
+//    }
+
+    // call on date and time set
+    private void setReminder(Long reminderTimeInMillis) {
+        createNotificationChannel();
+
+        Toast.makeText(this, "Reminder Set Successfully!", Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(getApplicationContext(), ReminderBroadcast.class);
+        intent.putExtra("titleExtra", binding.inputNoteTitle.getText().toString());
+        intent.putExtra("messageExtra", binding.inputNoteSubtitle.getText().toString());
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        alarmManager.set(AlarmManager.RTC_WAKEUP,
+                reminderTimeInMillis, pendingIntent);
+    }
+
+    // call onClickListener
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "NoteReminderChannel";
+            String description = "Channel for Note Reminder";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("notifyReminder", name, importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int month, int day) {
+        now.set(Calendar.YEAR, year);
+        now.set(Calendar.MONTH, month);
+        now.set(Calendar.DAY_OF_MONTH, day);
+
+        tpd.show(getSupportFragmentManager(), "Timepickerdialog");
+    }
+
+    @Override
+    public void onTimeSet(TimePickerDialog view, int hrs, int min, int sec) {
+        now.set(Calendar.HOUR_OF_DAY, hrs);
+        now.set(Calendar.MINUTE, min);
+        now.set(Calendar.SECOND, 0);
+        if (binding.inputNoteTitle.getText().toString().trim().isEmpty()) {
+            Toast.makeText(this, "Note title can't be empty!", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (binding.inputNoteSubtitle.getText().toString().trim().isEmpty() && binding.inputNote.getText().toString().trim().isEmpty()) {
+            Toast.makeText(this, "Note can't be empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Long reminderInMillisec = now.getTimeInMillis();
+
+        //show Alert
+        showAlertForReminderConfirm(reminderInMillisec, binding.inputNoteTitle.getText().toString(), binding.inputNoteSubtitle.getText().toString());
+
+        //initialize notification
+//        setReminder(reminderInMillisec);
+//        NotifyMe notifyMe = new NotifyMe.Builder(getApplicationContext())
+//                .title(binding.inputNoteTitle.getText().toString())
+//                .content(binding.inputNoteSubtitle.getText().toString())
+//                .color(93, 16, 73, 1)
+//                .led_color(255, 255, 255, 1)
+//                .time(now)
+//                .delay(0)
+//                .key("test")
+//                .addAction(new Intent(getApplicationContext(), CreateNoteActivity.class), "Dismiss", true, true)
+//                .large_icon(R.drawable.ic_stat_name)
+//                .build();
+//        Toast.makeText(this, "Reminder Set Successfully", Toast.LENGTH_SHORT).show();
+    }
+
+    private void showAlertForReminderConfirm(Long time, String title, String message) {
+        Date date = new Date(time);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(CreateNoteActivity.this);
+        alertDialogBuilder.setTitle("Schedule Notification?");
+        alertDialogBuilder
+                .setMessage("For " + title + "\nAt " + new SimpleDateFormat("E, dd MMM yyyy hh:mm a z", Locale.getDefault())
+                        .format(date))
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        setReminder(time);
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // if this button is clicked, just close
+                        // the dialog box and do nothing
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     private void showDeleteNoteDialog() {
@@ -346,23 +543,22 @@ public class CreateNoteActivity extends AppCompatActivity {
         dialogDeleteNote.show();
     }
 
-    private void setSubtitleIndicatorColor() {
-        GradientDrawable gradientDrawable = (GradientDrawable) binding.viewSubtitleIndicator.getBackground();
-        gradientDrawable.setColor(Color.parseColor(selectedNoteColor));
+    private void setNoteBackgroundColor() {
+        binding.noteContainer.setBackgroundColor(Color.parseColor(selectedNoteColor));
     }
 
     private void selectImage() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(intent, REQUEST_CODE_SELECT_IMAGE);
-        }else{
+        } else {
             Toast.makeText(this, "Opening Image Picker...", Toast.LENGTH_SHORT).show();
             Intent i = new Intent();
             i.setType("image/*");
             i.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(i, "Select Picture"), SELECT_PICTURE);
         }
-}
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -399,7 +595,7 @@ public class CreateNoteActivity extends AppCompatActivity {
                 }
             }
         }
-        if (requestCode == SELECT_PICTURE&& resultCode == RESULT_OK) {
+        if (requestCode == SELECT_PICTURE && resultCode == RESULT_OK) {
             // Get the url of the image from data
             if (data != null) {
                 Uri selectedImageUri = data.getData();

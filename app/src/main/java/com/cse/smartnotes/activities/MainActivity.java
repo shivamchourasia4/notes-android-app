@@ -60,15 +60,15 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
         // Quick Actions ML Scanner
         View textScan = quickActions.findViewById(R.id.imageToText);
         textScan.setOnClickListener(view -> {
-            Intent i = new Intent(MainActivity.this, ScannerActivity.class);
-            startActivityForResult(new Intent(getApplicationContext(), ScannerActivity.class), REQUEST_CODE_ADD_NOTE);
+            Intent intent = new Intent(MainActivity.this, ScannerActivity.class);
+            startActivityForResult(intent, REQUEST_CODE_ADD_NOTE);
         });
 
         // Quick Actions ML Speech
         View speechScan = quickActions.findViewById(R.id.speech);
         speechScan.setOnClickListener(view -> {
-            Intent i = new Intent(MainActivity.this, SpeechActivity.class);
-            startActivityForResult(new Intent(getApplicationContext(), SpeechActivity.class), REQUEST_CODE_ADD_NOTE);
+            Intent intent = new Intent(MainActivity.this, SpeechActivity.class);
+            startActivityForResult(intent, REQUEST_CODE_ADD_NOTE);
         });
 
         noteList = new ArrayList<>();

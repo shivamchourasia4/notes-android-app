@@ -55,7 +55,7 @@ dependencies {
     implementation 'com.intuit.ssp:ssp-android:1.0.6'
 
     // Material Design
-    implementation 'com.google.android.material:material:1.1.0'
+    implementation 'com.google.android.material:material:1.5.0'
 
     // Rounded ImageView
     implementation 'com.makeramen:roundedimageview:2.3.0'
@@ -63,4 +63,9 @@ dependencies {
     //Firebase ML
     implementation 'com.google.firebase:firebase-core:19.0.0'
     implementation 'com.google.android.gms:play-services-mlkit-text-recognition:16.2.0'
+    implementation 'com.github.jakebonk:NotifyMe:1.0.1'
+    implementation ('com.wdullaer:materialdatetimepicker:4.2.3') {
+        exclude group: 'androidx.appcompat'
+        exclude group: 'androidx.recyclerview'
+    }
 }

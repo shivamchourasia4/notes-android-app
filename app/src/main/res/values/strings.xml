@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Smart Notes</string>
     <string name="my_notes">My Notes</string>
-    <string name="search_notes">Search your notes</string>
+    <string name="search_notes">Search Your Notes...</string>
     <string name="note_title">Note Title</string>
     <string name="note_subtitle">Note Subtitle</string>
     <string name="type_note_here">Type note here..</string>
@@ -14,4 +14,5 @@
     <string name="cancel_dialog">Cancel</string>
     <string name="delete_note">Delete Note</string>
     <string name="are_you_sure">Are You Sure ?</string>
+    <string name="reminder">Add Reminder</string>
 </resources>

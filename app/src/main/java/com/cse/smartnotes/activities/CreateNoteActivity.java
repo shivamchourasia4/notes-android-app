@@ -1,6 +1,7 @@
 package com.cse.smartnotes.activities;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -13,14 +14,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Rect;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.InputType;
 import android.util.Patterns;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -60,7 +60,6 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
     Calendar now = Calendar.getInstance();
     private String selectedNoteColor;
     private String selectedImagePath;
-    private AlertDialog dialogAddURL;
     private TimePickerDialog tpd;
     private DatePickerDialog dpd;
     private Note alreadyAvailableNote;
@@ -71,8 +70,7 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
         binding = ActivityCreateNoteBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         binding.imageBack.setOnClickListener(view -> {
-            InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            mgr.hideSoftInputFromWindow(binding.inputNote.getWindowToken(), 0);
+            hideKeyboard(binding.inputNote);
             onBackPressed();
         });
 
@@ -85,6 +83,7 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
 
         selectedNoteColor = "#FFFFFFFF";
         selectedImagePath = "";
+        setTextHintColorLight();
 
         if (getIntent().getBooleanExtra("isViewOrUpdate", false)) {
             alreadyAvailableNote = (Note) getIntent().getSerializableExtra("note");
@@ -111,21 +110,30 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
         setNoteBackgroundColor();
     }
 
+    private void hideKeyboard(View p) {
+        InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        mgr.hideSoftInputFromWindow(p.getWindowToken(), 0);
+    }
+
+    private void showKeyboard() {
+        InputMethodManager imm = (InputMethodManager)getSystemService(this.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,InputMethodManager.HIDE_IMPLICIT_ONLY);
+    }
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             View v = getCurrentFocus();
-            if ( v instanceof EditText) {
+            if (v instanceof EditText) {
                 Rect outRect = new Rect();
                 v.getGlobalVisibleRect(outRect);
-                if (!outRect.contains((int)event.getRawX(), (int)event.getRawY())) {
+                if (!outRect.contains((int) event.getRawX(), (int) event.getRawY())) {
                     v.clearFocus();
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    hideKeyboard(v);
                 }
             }
         }
-        return super.dispatchTouchEvent( event );
+        return super.dispatchTouchEvent(event);
     }
 
 
@@ -156,8 +164,7 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
             Toast.makeText(this, "Note can't be empty", Toast.LENGTH_SHORT).show();
             return;
         }
-        InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        mgr.hideSoftInputFromWindow(binding.inputNote.getWindowToken(), 0);
+        hideKeyboard(binding.inputNote);
 
         final Note note = new Note();
         note.setTitle(binding.inputNoteTitle.getText().toString());
@@ -227,60 +234,65 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
             imageColor4.setImageResource(0);
             imageColor5.setImageResource(0);
             setNoteBackgroundColor();
+            setTextHintColorLight();
         });
 
         layoutTools.findViewById(R.id.viewColor2).setOnClickListener(view -> {
-            selectedNoteColor = "#FFF59D";
+            selectedNoteColor = "#fff59d";
             imageColor2.setImageResource(R.drawable.ic_baseline_done);
             imageColor1.setImageResource(0);
             imageColor3.setImageResource(0);
             imageColor4.setImageResource(0);
             imageColor5.setImageResource(0);
             setNoteBackgroundColor();
+            setTextHintColorDark();
         });
 
         layoutTools.findViewById(R.id.viewColor3).setOnClickListener(view -> {
-            selectedNoteColor = "#FFAB91";
+            selectedNoteColor = "#ffccbc";
             imageColor3.setImageResource(R.drawable.ic_baseline_done);
             imageColor2.setImageResource(0);
             imageColor1.setImageResource(0);
             imageColor4.setImageResource(0);
             imageColor5.setImageResource(0);
             setNoteBackgroundColor();
+            setTextHintColorDark();
         });
 
         layoutTools.findViewById(R.id.viewColor4).setOnClickListener(view -> {
-            selectedNoteColor = "#A5D6A7";
+            selectedNoteColor = "#b3e5fc";
             imageColor4.setImageResource(R.drawable.ic_baseline_done);
             imageColor2.setImageResource(0);
             imageColor3.setImageResource(0);
             imageColor1.setImageResource(0);
             imageColor5.setImageResource(0);
             setNoteBackgroundColor();
+            setTextHintColorDark();
         });
 
         layoutTools.findViewById(R.id.viewColor5).setOnClickListener(view -> {
-            selectedNoteColor = "#CE93D8";
+            selectedNoteColor = "#e1bee7";
             imageColor5.setImageResource(R.drawable.ic_baseline_done);
             imageColor2.setImageResource(0);
             imageColor3.setImageResource(0);
             imageColor4.setImageResource(0);
             imageColor1.setImageResource(0);
             setNoteBackgroundColor();
+            setTextHintColorDark();
         });
 
         if (alreadyAvailableNote != null && alreadyAvailableNote.getColor() != null && !alreadyAvailableNote.getColor().trim().isEmpty()) {
             switch (alreadyAvailableNote.getColor()) {
-                case "#FFF59D":
+                case "#fff59d":
                     layoutTools.findViewById(R.id.viewColor2).performClick();
                     break;
-                case "#FFAB91":
+                case "#ffccbc":
                     layoutTools.findViewById(R.id.viewColor3).performClick();
                     break;
-                case "#A5D6A7":
+                case "#b3e5fc":
                     layoutTools.findViewById(R.id.viewColor4).performClick();
                     break;
-                case "#CE93D8":
+                case "#e1bee7":
                     layoutTools.findViewById(R.id.viewColor5).performClick();
                     break;
             }
@@ -342,6 +354,18 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
             });
 
         }
+    }
+
+    private void setTextHintColorDark() {
+        binding.inputNoteTitle.setHintTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorHintDark));
+        binding.inputNoteSubtitle.setHintTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorHintDark));
+        binding.inputNote.setHintTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorHintDark));
+    }
+
+    private void setTextHintColorLight() {
+        binding.inputNoteTitle.setHintTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorHint));
+        binding.inputNoteSubtitle.setHintTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorHint));
+        binding.inputNote.setHintTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorHint));
     }
 
     // call onClickListener
@@ -559,27 +583,23 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
         return filePath;
     }
 
+    @SuppressLint("RestrictedApi")
     private void showAddURLDialog() {
-        if (dialogAddURL == null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(CreateNoteActivity.this);
-            View view = LayoutInflater.from(this).inflate(
-                    R.layout.layout_add_url,
-                    findViewById(R.id.layoutAddUrlContainer)
-            );
 
-            builder.setView(view);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(CreateNoteActivity.this);
+        alertDialogBuilder.setTitle("Add URL");
+        // Set up the input
+        final EditText inputURL = new EditText(this);
+        inputURL.requestFocus();
+        showKeyboard();
 
-            dialogAddURL = builder.create();
-            if (dialogAddURL.getWindow() != null) {
-                dialogAddURL.getWindow().setBackgroundDrawable(new ColorDrawable(0));
-            }
-
-            final EditText inputURL = view.findViewById(R.id.inputUrl);
-            inputURL.requestFocus();
-
-            view.findViewById(R.id.textAdd).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+        // Specify the type of input expected.
+        inputURL.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+        alertDialogBuilder
+                .setView(inputURL, 50, 0,50, 0)
+                .setCancelable(false)
+                .setIcon(R.drawable.ic_baseline_web)
+                .setPositiveButton("Add", (dialog, id) -> {
                     if (inputURL.getText().toString().trim().isEmpty()) {
                         Toast.makeText(CreateNoteActivity.this, "Enter URL", Toast.LENGTH_SHORT).show();
                     } else if (!Patterns.WEB_URL.matcher(inputURL.getText().toString()).matches()) {
@@ -587,18 +607,57 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
                     } else {
                         binding.textWebURL.setText(inputURL.getText().toString());
                         binding.layoutWebURL.setVisibility(View.VISIBLE);
-                        dialogAddURL.dismiss();
                     }
-                }
-            });
+                    hideKeyboard(inputURL);
+                })
+                .setNegativeButton("Cancel", (dialog, id) -> {
+                    // if this button is clicked, just close
+                    // the dialog box and do nothing
+                    hideKeyboard(inputURL);
+                    dialog.cancel();
+                });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
 
-            view.findViewById(R.id.textCancel).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dialogAddURL.dismiss();
-                }
-            });
-        }
-        dialogAddURL.show();
+//        if (dialogAddURL == null) {
+//            AlertDialog.Builder builder = new AlertDialog.Builder(CreateNoteActivity.this);
+//            View view = LayoutInflater.from(this).inflate(
+//                    R.layout.layout_add_url,
+//                    findViewById(R.id.layoutAddUrlContainer)
+//            );
+//
+//            builder.setView(view);
+//
+//            dialogAddURL = builder.create();
+//            if (dialogAddURL.getWindow() != null) {
+//                dialogAddURL.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+//            }
+//
+//            final EditText inputURL = view.findViewById(R.id.inputUrl);
+//            inputURL.requestFocus();
+//
+//            view.findViewById(R.id.textAdd).setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    if (inputURL.getText().toString().trim().isEmpty()) {
+//                        Toast.makeText(CreateNoteActivity.this, "Enter URL", Toast.LENGTH_SHORT).show();
+//                    } else if (!Patterns.WEB_URL.matcher(inputURL.getText().toString()).matches()) {
+//                        Toast.makeText(CreateNoteActivity.this, "Enter valid url", Toast.LENGTH_SHORT).show();
+//                    } else {
+//                        binding.textWebURL.setText(inputURL.getText().toString());
+//                        binding.layoutWebURL.setVisibility(View.VISIBLE);
+//                        dialogAddURL.dismiss();
+//                    }
+//                }
+//            });
+//
+//            view.findViewById(R.id.textCancel).setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    dialogAddURL.dismiss();
+//                }
+//            });
+//        }
+//        dialogAddURL.show();
     }
 }

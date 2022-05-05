@@ -9,16 +9,17 @@
     app:behavior_peekHeight="@dimen/_40sdp"
     app:layout_behavior="@string/bottom_sheet_behavior">
 
-    <TextView
+    <LinearLayout
         android:id="@+id/textTools"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_40sdp"
-        android:fontFamily="@font/raleway_regular"
-        android:gravity="center"
-        android:includeFontPadding="false"
-        android:text="@string/tools"
-        android:textColor="@color/white"
-        android:textSize="@dimen/_14ssp" />
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:src="@drawable/ic_up" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/layoutNoteColor"

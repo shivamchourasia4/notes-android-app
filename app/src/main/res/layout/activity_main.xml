@@ -58,8 +58,8 @@
             android:imeOptions="actionDone"
             android:importantForAutofill="no"
             android:inputType="text"
-            android:textColor="@color/colorSecondary"
-            android:textColorHint="@color/colorAccent"
+            android:textColor="@color/black"
+            android:textColorHint="@color/colorHint"
             android:textSize="@dimen/_14ssp"
             android:textCursorDrawable="@drawable/color_cursor"/>
     </LinearLayout>

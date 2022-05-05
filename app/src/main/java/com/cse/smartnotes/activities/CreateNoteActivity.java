@@ -6,13 +6,13 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Patterns;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -50,7 +51,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-//
 public class CreateNoteActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     public static final int SELECT_PICTURE = 200;
@@ -61,7 +61,6 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
     private String selectedNoteColor;
     private String selectedImagePath;
     private AlertDialog dialogAddURL;
-    private AlertDialog dialogDeleteNote;
     private TimePickerDialog tpd;
     private DatePickerDialog dpd;
     private Note alreadyAvailableNote;
@@ -71,13 +70,10 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
         super.onCreate(savedInstanceState);
         binding = ActivityCreateNoteBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        binding.imageBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                mgr.hideSoftInputFromWindow(binding.inputNote.getWindowToken(), 0);
-                onBackPressed();
-            }
+        binding.imageBack.setOnClickListener(view -> {
+            InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            mgr.hideSoftInputFromWindow(binding.inputNote.getWindowToken(), 0);
+            onBackPressed();
         });
 
         binding.textDateTime.setText(
@@ -115,14 +111,24 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
         setNoteBackgroundColor();
     }
 
-    //    @Override
-//    public void onBackPressed() {
-//        Intent intent;
-//        intent = new Intent(this, MainActivity.class);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        finish();
-//        startActivity(intent);
-//    }
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if ( v instanceof EditText) {
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+                if (!outRect.contains((int)event.getRawX(), (int)event.getRawY())) {
+                    v.clearFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        }
+        return super.dispatchTouchEvent( event );
+    }
+
+
     private void setViewOrUpdateNote() {
         binding.inputNoteTitle.setText(alreadyAvailableNote.getTitle());
         binding.inputNoteSubtitle.setText(alreadyAvailableNote.getSubtitle());
@@ -224,7 +230,7 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
         });
 
         layoutTools.findViewById(R.id.viewColor2).setOnClickListener(view -> {
-            selectedNoteColor = "#fff59d";
+            selectedNoteColor = "#FFF59D";
             imageColor2.setImageResource(R.drawable.ic_baseline_done);
             imageColor1.setImageResource(0);
             imageColor3.setImageResource(0);
@@ -234,7 +240,7 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
         });
 
         layoutTools.findViewById(R.id.viewColor3).setOnClickListener(view -> {
-            selectedNoteColor = "#ffccbc";
+            selectedNoteColor = "#FFAB91";
             imageColor3.setImageResource(R.drawable.ic_baseline_done);
             imageColor2.setImageResource(0);
             imageColor1.setImageResource(0);
@@ -244,7 +250,7 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
         });
 
         layoutTools.findViewById(R.id.viewColor4).setOnClickListener(view -> {
-            selectedNoteColor = "#b3e5fc";
+            selectedNoteColor = "#A5D6A7";
             imageColor4.setImageResource(R.drawable.ic_baseline_done);
             imageColor2.setImageResource(0);
             imageColor3.setImageResource(0);
@@ -254,7 +260,7 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
         });
 
         layoutTools.findViewById(R.id.viewColor5).setOnClickListener(view -> {
-            selectedNoteColor = "#e1bee7";
+            selectedNoteColor = "#CE93D8";
             imageColor5.setImageResource(R.drawable.ic_baseline_done);
             imageColor2.setImageResource(0);
             imageColor3.setImageResource(0);
@@ -265,16 +271,16 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
 
         if (alreadyAvailableNote != null && alreadyAvailableNote.getColor() != null && !alreadyAvailableNote.getColor().trim().isEmpty()) {
             switch (alreadyAvailableNote.getColor()) {
-                case "#fff59d":
+                case "#FFF59D":
                     layoutTools.findViewById(R.id.viewColor2).performClick();
                     break;
-                case "#ffccbc":
+                case "#FFAB91":
                     layoutTools.findViewById(R.id.viewColor3).performClick();
                     break;
-                case "#b3e5fc":
+                case "#A5D6A7":
                     layoutTools.findViewById(R.id.viewColor4).performClick();
                     break;
-                case "#e1bee7":
+                case "#CE93D8":
                     layoutTools.findViewById(R.id.viewColor5).performClick();
                     break;
             }
@@ -293,10 +299,12 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
                 selectImage();
             }
         });
+
         layoutTools.findViewById(R.id.layoutAddUrl).setOnClickListener(view -> {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             showAddURLDialog();
         });
+
         layoutTools.findViewById(R.id.layoutAddReminder).setOnClickListener(view -> {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             dpd = DatePickerDialog.newInstance(
@@ -315,31 +323,15 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
             );
             dpd.setAccentColor("#4E0D3A");
             tpd.setAccentColor("#4E0D3A");
+
             dpd.setMinDate(Calendar.getInstance());
-//            Toast.makeText(this, "now: "+Calendar.getInstance().get(Calendar.HOUR_OF_DAY)+ Calendar.getInstance().get(Calendar.MINUTE), Toast.LENGTH_LONG).show();
             tpd.setMinTime(Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), 0);
-            dpd.show(getSupportFragmentManager(), "Datepickerdialog");
+
+            dpd.show(getSupportFragmentManager(), "DatePickerDialog");
 
 
             createNotificationChannel();
 
-//            Toast.makeText(this, "Reminder Set Successfully!", Toast.LENGTH_SHORT).show();
-//
-//            Intent intent = new Intent(getApplicationContext(), Notification.class);
-//            intent.putExtra("titleExtra", binding.inputNoteTitle.getText().toString());
-//            intent.putExtra("messageExtra", binding.inputNoteSubtitle.getText().toString());
-//
-//            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-//
-//            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-//
-//            long timeAtButtonClick = System.currentTimeMillis();
-//            long tenSecondInMillis = 1000 * 5;
-//
-//            alarmManager.set(AlarmManager.RTC_WAKEUP,
-//                    timeAtButtonClick + tenSecondInMillis, pendingIntent);
-
-//            callPickers();
         });
 
         if (alreadyAvailableNote != null) {
@@ -350,71 +342,6 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
             });
 
         }
-    }
-
-    // pick date and time
-//    private void callPickers() {
-//        MaterialDatePicker materialDatePicker = MaterialDatePicker.Builder.datePicker()
-//                .setTitleText("Select Date")
-//                .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-//                .build();
-//
-//        materialDatePicker.show(getSupportFragmentManager(), "DatePickerDialog");
-//        materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {
-//            @Override
-//            public void onPositiveButtonClick(Long selection) {
-//                Calendar calendar = Calendar.getInstance();
-//                calendar.setTimeInMillis(selection);
-//                Toast.makeText(CreateNoteActivity.this, "picker: "+calendar.getTime(), Toast.LENGTH_SHORT).show();
-//
-//                MaterialTimePicker materialTimePicker = new MaterialTimePicker.Builder()
-//                        .setTitleText("Select A Time")
-//                        .setHour(LocalDateTime.now().getHour())
-//                        .setMinute(LocalDateTime.now().getMinute())
-//                        .build();
-//
-//                materialTimePicker.show(getSupportFragmentManager(), "TimePickerDialog");
-//                materialTimePicker.addOnPositiveButtonClickListener(v -> {
-//                    calendar.set(Calendar.HOUR_OF_DAY, materialTimePicker.getHour());
-//                    calendar.set(Calendar.MINUTE, materialTimePicker.getMinute());
-//                    calendar.set(Calendar.SECOND, 0);
-//
-//                    if (binding.inputNoteTitle.getText().toString().trim().isEmpty()) {
-//                        Toast.makeText(CreateNoteActivity.this, "Note title can't be empty!", Toast.LENGTH_SHORT).show();
-//                        return;
-//                    } else if (binding.inputNoteSubtitle.getText().toString().trim().isEmpty() && binding.inputNote.getText().toString().trim().isEmpty()) {
-//                        Toast.makeText(CreateNoteActivity.this, "Note can't be empty", Toast.LENGTH_SHORT).show();
-//                        return;
-//                    }
-//
-//                    Toast.makeText(CreateNoteActivity.this, "now: "
-//                            + calendar.getTime(), Toast.LENGTH_SHORT).show();
-//                    Long reminderInMillisec = calendar.getTimeInMillis();
-//
-//                    //show Alert
-//                    showAlertForReminderConfirm(reminderInMillisec, binding.inputNoteTitle.getText().toString(), binding.inputNoteSubtitle.getText().toString());
-//                });
-//
-//            }
-//        });
-//    }
-
-    // call on date and time set
-    private void setReminder(Long reminderTimeInMillis) {
-        createNotificationChannel();
-
-        Toast.makeText(this, "Reminder Set Successfully!", Toast.LENGTH_SHORT).show();
-
-        Intent intent = new Intent(getApplicationContext(), ReminderBroadcast.class);
-        intent.putExtra("titleExtra", binding.inputNoteTitle.getText().toString());
-        intent.putExtra("messageExtra", binding.inputNoteSubtitle.getText().toString());
-
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-
-        alarmManager.set(AlarmManager.RTC_WAKEUP,
-                reminderTimeInMillis, pendingIntent);
     }
 
     // call onClickListener
@@ -438,7 +365,7 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
         now.set(Calendar.MONTH, month);
         now.set(Calendar.DAY_OF_MONTH, day);
 
-        tpd.show(getSupportFragmentManager(), "Timepickerdialog");
+        tpd.show(getSupportFragmentManager(), "TimePickerDialog");
     }
 
     @Override
@@ -454,26 +381,13 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
             return;
         }
 
-        Long reminderInMillisec = now.getTimeInMillis();
+        Long reminderInMillis = now.getTimeInMillis();
 
-        //show Alert
-        showAlertForReminderConfirm(reminderInMillisec, binding.inputNoteTitle.getText().toString(), binding.inputNoteSubtitle.getText().toString());
+        //show Alert and Set Reminder based on response
+        showAlertForReminderConfirm(reminderInMillis, binding.inputNoteTitle.getText().toString(), binding.inputNoteSubtitle.getText().toString());
 
-        //initialize notification
-//        setReminder(reminderInMillisec);
-//        NotifyMe notifyMe = new NotifyMe.Builder(getApplicationContext())
-//                .title(binding.inputNoteTitle.getText().toString())
-//                .content(binding.inputNoteSubtitle.getText().toString())
-//                .color(93, 16, 73, 1)
-//                .led_color(255, 255, 255, 1)
-//                .time(now)
-//                .delay(0)
-//                .key("test")
-//                .addAction(new Intent(getApplicationContext(), CreateNoteActivity.class), "Dismiss", true, true)
-//                .large_icon(R.drawable.ic_stat_name)
-//                .build();
-//        Toast.makeText(this, "Reminder Set Successfully", Toast.LENGTH_SHORT).show();
     }
+
 
     private void showAlertForReminderConfirm(Long time, String title, String message) {
         Date date = new Date(time);
@@ -484,63 +398,72 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
                 .setMessage("For " + title + "\nAt " + new SimpleDateFormat("E, dd MMM yyyy hh:mm a z", Locale.getDefault())
                         .format(date))
                 .setCancelable(false)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        setReminder(time);
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // if this button is clicked, just close
-                        // the dialog box and do nothing
-                        dialog.cancel();
-                    }
+                .setIcon(R.drawable.ic_baseline_notifications)
+                .setPositiveButton("Yes", (dialog, id) -> setReminder(time))
+                .setNegativeButton("No", (dialog, id) -> {
+                    // if this button is clicked, just close
+                    // the dialog box and do nothing
+                    dialog.cancel();
                 });
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
 
+    // call on date and time set
+    private void setReminder(Long reminderTimeInMillis) {
+        createNotificationChannel();
+
+        Toast.makeText(this, "Reminder Set Successfully!", Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(getApplicationContext(), ReminderBroadcast.class);
+        intent.putExtra("titleExtra", binding.inputNoteTitle.getText().toString());
+        intent.putExtra("messageExtra", binding.inputNoteSubtitle.getText().toString());
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        alarmManager.set(AlarmManager.RTC_WAKEUP,
+                reminderTimeInMillis, pendingIntent);
+    }
+
     private void showDeleteNoteDialog() {
 
-        if (dialogDeleteNote == null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(CreateNoteActivity.this);
-            View view = LayoutInflater.from(this).inflate(
-                    R.layout.layout_delete_note,
-                    findViewById(R.id.layoutDeleteNoteContainer));
-            builder.setView(view);
-            dialogDeleteNote = builder.create();
-            if (dialogDeleteNote.getWindow() != null) {
-                dialogDeleteNote.getWindow().setBackgroundDrawable(new ColorDrawable(0));
-            }
-            view.findViewById(R.id.textDeleteNote).setOnClickListener(view1 -> {
-                class DeleteNoteTask extends AsyncTask<Void, Void, Void> {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(CreateNoteActivity.this);
+        alertDialogBuilder.setTitle("Delete Note");
+        alertDialogBuilder
+                .setMessage("Are You Sure ?")
+                .setCancelable(false)
+                .setIcon(R.drawable.ic_baseline_delete)
+                .setPositiveButton("Yes", (dialog, id) -> {
+                    class DeleteNoteTask extends AsyncTask<Void, Void, Void> {
 
-                    @Override
-                    protected Void doInBackground(Void... voids) {
-                        NotesDatabase.getDatabase(getApplicationContext()).noteDao().deleteNote(alreadyAvailableNote);
-                        return null;
+                        @Override
+                        protected Void doInBackground(Void... voids) {
+                            NotesDatabase.getDatabase(getApplicationContext()).noteDao().deleteNote(alreadyAvailableNote);
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Void aVoid) {
+                            super.onPostExecute(aVoid);
+                            Intent intent = new Intent();
+                            intent.putExtra("isNoteDeleted", true);
+                            setResult(RESULT_OK, intent);
+                            finish();
+                        }
                     }
 
-                    @Override
-                    protected void onPostExecute(Void aVoid) {
-                        super.onPostExecute(aVoid);
-                        Intent intent = new Intent();
-                        intent.putExtra("isNoteDeleted", true);
-                        setResult(RESULT_OK, intent);
-                        finish();
-                    }
-                }
+                    new DeleteNoteTask().execute();
+                })
+                .setNegativeButton("No", (dialog, id) -> {
+                    // if this button is clicked, just close
+                    // the dialog box and do nothing
+                    dialog.cancel();
+                });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
 
-                new DeleteNoteTask().execute();
-
-            });
-
-            view.findViewById(R.id.textCancel).setOnClickListener(view1 -> {
-                dialogDeleteNote.dismiss();
-            });
-        }
-
-        dialogDeleteNote.show();
     }
 
     private void setNoteBackgroundColor() {

@@ -1,12 +1,15 @@
 package com.cse.smartnotes.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.Layout;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -25,11 +28,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NotesListener {
-    ActivityMainBinding binding;
-
     public static final int REQUEST_CODE_ADD_NOTE = 1; // to add note
     public static final int REQUEST_CODE_UPDATE_NOTE = 2; // to update note
     public static final int REQUEST_CODE_SHOW_NOTE = 3; // to display all note
+    ActivityMainBinding binding;
     private List<Note> noteList;
     private NotesAdapter notesAdapter;
 
@@ -51,12 +53,17 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
         );
 
         // Quick Actions checklist
-        View quickActions =  findViewById(R.id.layoutQuickActions);
+        View quickActions = findViewById(R.id.layoutQuickActions);
         View nav = quickActions.findViewById(R.id.checkLists);
         nav.setOnClickListener(view -> {
             Toast.makeText(this, "Clicked!!!", Toast.LENGTH_SHORT).show();
         });
-
+        // Quick Action Draw
+        View drawAction = quickActions.findViewById(R.id.draw);
+        drawAction.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, DrawActivity.class);
+            startActivity(intent);
+        });
         // Quick Actions ML Scanner
         View textScan = quickActions.findViewById(R.id.imageToText);
         textScan.setOnClickListener(view -> {
@@ -91,12 +98,30 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (noteList.size()!=0){
+                if (noteList.size() != 0) {
                     notesAdapter.searchNotes(editable.toString());
                 }
             }
         });
     }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if (v instanceof EditText) {
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+                if (!outRect.contains((int) event.getRawX(), (int) event.getRawY())) {
+                    v.clearFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        }
+        return super.dispatchTouchEvent(event);
+    }
+
 
     @Override
     public void onNoteClicked(Note note, int position) {
@@ -119,17 +144,17 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
                 super.onPostExecute(notes);
                 // we are adding all notes from database to noteList
                 // and notify adapter about the new data set.
-                if(requestCode == REQUEST_CODE_SHOW_NOTE){
+                if (requestCode == REQUEST_CODE_SHOW_NOTE) {
                     noteList.addAll(notes);
                     notesAdapter.notifyDataSetChanged();
-                } else if(requestCode == REQUEST_CODE_ADD_NOTE){
+                } else if (requestCode == REQUEST_CODE_ADD_NOTE) {
                     // request code is REQUEST_CODE_ADD_NOTE so we are adding an only first note(i.e, newly added)
                     // from the database to noteList and notify the adapter for the newly inserted item
                     // and scrolling recycler view to the top.
                     noteList.add(0, notes.get(0));
                     notesAdapter.notifyItemInserted(0);
                     binding.notesRecyclerView.smoothScrollToPosition(0);
-                } else if(requestCode == REQUEST_CODE_UPDATE_NOTE){
+                } else if (requestCode == REQUEST_CODE_UPDATE_NOTE) {
                     noteList.remove(noteClickedPosition);
 
                     // first we remove note from the list
@@ -138,9 +163,9 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
                     // if not deleted -> then it must be updated that's why we are adding
                     // a newly updated note to that same position where we removed and notifying
                     // adapter about item change.
-                    if(isNoteDeleted){
+                    if (isNoteDeleted) {
                         notesAdapter.notifyItemRemoved(noteClickedPosition);
-                    }else{
+                    } else {
                         noteList.add(noteClickedPosition, notes.get(noteClickedPosition));
                         notesAdapter.notifyItemChanged(noteClickedPosition);
                     }
@@ -165,15 +190,15 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_CODE_ADD_NOTE && resultCode==RESULT_OK){
+        if (requestCode == REQUEST_CODE_ADD_NOTE && resultCode == RESULT_OK) {
             getNotes(REQUEST_CODE_ADD_NOTE, false);
             // also passed false as note is note deleted!
             // this is called from onActivityResult() and we check the current
             // request code is for add note and the result is RESULT_OK.
             // Basically, a new note is added from CreateNote activity and its result is
             // sent back to this activity that's why we are passing REQUEST_CODE_ADD_NOTE to it.
-        }else if(requestCode == REQUEST_CODE_UPDATE_NOTE && resultCode == RESULT_OK){
-            if(data != null){
+        } else if (requestCode == REQUEST_CODE_UPDATE_NOTE && resultCode == RESULT_OK) {
+            if (data != null) {
                 getNotes(REQUEST_CODE_UPDATE_NOTE, data.getBooleanExtra("isNoteDeleted", false));
                 // Here, we are updating already available note from the database, and it may be possible
                 // that note gets deleted therefore as a parameter isNoteDeleted, we are passing value from CreateNoteActivity,

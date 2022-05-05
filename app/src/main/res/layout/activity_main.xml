@@ -142,7 +142,7 @@
             android:layout_margin="@dimen/_16sdp"
             android:elevation="@dimen/_8sdp"
             android:src="@drawable/ic_baseline_add"
-            app:backgroundTint="@color/colorAccent"
+            app:backgroundTint="@color/colorSecondary"
             app:layout_anchor="@id/layoutQuickActionsNav"
             app:maxImageSize="@dimen/_24sdp"
             app:tint="@color/colorPrimary"

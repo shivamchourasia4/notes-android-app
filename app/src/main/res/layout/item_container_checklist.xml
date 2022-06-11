@@ -42,6 +42,7 @@
         android:fontFamily="@font/raleway_regular"
         android:background="@null"
         android:textColor="@color/black"
+        android:inputType="text"
         android:imeOptions="actionDone"
         android:importantForAutofill="no"
         android:includeFontPadding="false"

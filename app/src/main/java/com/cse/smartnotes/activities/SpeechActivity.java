@@ -1,8 +1,5 @@
 package com.cse.smartnotes.activities;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -13,6 +10,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.cse.smartnotes.R;
 
 import java.util.ArrayList;
@@ -22,9 +22,9 @@ public class SpeechActivity extends AppCompatActivity {
 
     protected static final int RESULT_SPEECH = 1;
     private static final int REQUEST_CODE_SAVE_TEXT_FROM_SPEECH = 41;
-    private TextView opText;
-    private Button sayBtn,saveBtn;
     View backBtn;
+    private TextView opText;
+    private Button sayBtn, saveBtn;
     private String capturedSpeechText = "";
     private boolean isDetectable = false;
 
@@ -39,7 +39,6 @@ public class SpeechActivity extends AppCompatActivity {
         saveBtn = findViewById(R.id.saveTextFromSpeech);
         backBtn = findViewById(R.id.speechBack);
         sayBtn.setOnClickListener(view -> {
-//                Toast.makeText(SpeechActivity.this, "Working!", Toast.LENGTH_SHORT).show();
             getSpeechResult();
         });
 
@@ -49,13 +48,13 @@ public class SpeechActivity extends AppCompatActivity {
             saveSpeechResult();
         });
 
-        if(!isDetectable){
+        if (!isDetectable) {
             saveBtn.setVisibility(View.GONE);
         }
 
     }
 
-    public void getSpeechResult(){
+    public void getSpeechResult() {
 
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
@@ -63,12 +62,12 @@ public class SpeechActivity extends AppCompatActivity {
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Hi! Say Something...");
         try {
             startActivityForResult(intent, RESULT_SPEECH);
-        }catch (ActivityNotFoundException e){
+        } catch (ActivityNotFoundException e) {
             Toast.makeText(SpeechActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void saveSpeechResult(){
+    public void saveSpeechResult() {
         Intent intent = new Intent(SpeechActivity.this, CreateNoteActivity.class);
         intent.putExtra("capturedForNote", capturedSpeechText);
         startActivityForResult(intent, REQUEST_CODE_SAVE_TEXT_FROM_SPEECH);
@@ -77,17 +76,17 @@ public class SpeechActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-                if(requestCode == RESULT_SPEECH && resultCode == RESULT_OK && data!=null){
-                    ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    opText.setText(result.get(0));
-                    capturedSpeechText = result.get(0);
-                    isDetectable=true;
-                    saveBtn.setVisibility(View.VISIBLE);
-                }
-                if (requestCode == REQUEST_CODE_SAVE_TEXT_FROM_SPEECH && resultCode == RESULT_OK){
-                    Intent intent = new Intent();
-                    setResult(Activity.RESULT_OK,intent);
-                    finish();
-                }
+        if (requestCode == RESULT_SPEECH && resultCode == RESULT_OK && data != null) {
+            ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            opText.setText(result.get(0));
+            capturedSpeechText = result.get(0);
+            isDetectable = true;
+            saveBtn.setVisibility(View.VISIBLE);
+        }
+        if (requestCode == REQUEST_CODE_SAVE_TEXT_FROM_SPEECH && resultCode == RESULT_OK) {
+            Intent intent = new Intent();
+            setResult(Activity.RESULT_OK, intent);
+            finish();
+        }
     }
 }

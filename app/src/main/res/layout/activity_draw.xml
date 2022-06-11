@@ -12,6 +12,7 @@
         sign:enableSignature="true"
         sign:penColor="#000000"
         sign:penSize="5dp" />
+
     <ImageView
         android:id="@+id/drawBack"
         android:layout_width="@dimen/_30sdp"
@@ -22,13 +23,14 @@
         android:contentDescription="@string/app_name"
         android:src="@drawable/ic_back"
         android:tint="@color/colorAccent" />
+
     <LinearLayout
         android:id="@+id/optionsHolder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:gravity="center"
         android:background="@color/white"
+        android:gravity="center"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -42,10 +44,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:layout_weight="1"
                 android:progressBackgroundTint="@color/lilac"
-                android:thumbTint="@color/colorSecondary"
                 android:progressTint="@color/colorSecondary"
-                android:layout_weight="1" />
+                android:thumbTint="@color/colorSecondary" />
 
             <TextView
                 android:id="@+id/txtPenSize"
@@ -69,8 +71,8 @@
                 android:layout_weight="1"
                 android:background="@color/white"
                 android:scaleType="center"
-                android:tint="@color/colorSecondary"
-                android:src="@drawable/ic_eraser">
+                android:src="@drawable/ic_eraser"
+                android:tint="@color/colorSecondary">
 
             </ImageButton>
 
@@ -81,8 +83,8 @@
                 android:layout_weight="1"
                 android:background="@color/white"
                 android:scaleType="center"
-                android:tint="@color/colorSecondary"
-                android:src="@drawable/ic_color">
+                android:src="@drawable/ic_color"
+                android:tint="@color/colorSecondary">
 
             </ImageButton>
 
@@ -93,8 +95,8 @@
                 android:layout_weight="1"
                 android:background="@color/white"
                 android:scaleType="center"
-                android:tint="@color/colorSecondary"
-                android:src="@drawable/ic_save">
+                android:src="@drawable/ic_save"
+                android:tint="@color/colorSecondary">
 
             </ImageButton>
         </LinearLayout>

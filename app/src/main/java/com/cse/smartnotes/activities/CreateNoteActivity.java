@@ -76,8 +76,11 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //View Binding
         binding = ActivityCreateNoteBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
         binding.imageBack.setOnClickListener(view -> {
             hideKeyboard(binding.inputNote);
             onBackPressed();
@@ -132,6 +135,7 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
         setNoteBackgroundColor();
     }
 
+    //Keyboard Management
     private void hideKeyboard(View p) {
         InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         mgr.hideSoftInputFromWindow(p.getWindowToken(), 0);
@@ -142,6 +146,7 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
     }
 
+    // Touch Events
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -405,7 +410,7 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
         binding.inputNote.setHintTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorHint));
     }
 
-    // call onClickListener
+    // call onClickListener (Notification)
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "NoteReminderChannel";
@@ -658,47 +663,6 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
                 });
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
-
-//        if (dialogAddURL == null) {
-//            AlertDialog.Builder builder = new AlertDialog.Builder(CreateNoteActivity.this);
-//            View view = LayoutInflater.from(this).inflate(
-//                    R.layout.layout_add_url,
-//                    findViewById(R.id.layoutAddUrlContainer)
-//            );
-//
-//            builder.setView(view);
-//
-//            dialogAddURL = builder.create();
-//            if (dialogAddURL.getWindow() != null) {
-//                dialogAddURL.getWindow().setBackgroundDrawable(new ColorDrawable(0));
-//            }
-//
-//            final EditText inputURL = view.findViewById(R.id.inputUrl);
-//            inputURL.requestFocus();
-//
-//            view.findViewById(R.id.textAdd).setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    if (inputURL.getText().toString().trim().isEmpty()) {
-//                        Toast.makeText(CreateNoteActivity.this, "Enter URL", Toast.LENGTH_SHORT).show();
-//                    } else if (!Patterns.WEB_URL.matcher(inputURL.getText().toString()).matches()) {
-//                        Toast.makeText(CreateNoteActivity.this, "Enter valid url", Toast.LENGTH_SHORT).show();
-//                    } else {
-//                        binding.textWebURL.setText(inputURL.getText().toString());
-//                        binding.layoutWebURL.setVisibility(View.VISIBLE);
-//                        dialogAddURL.dismiss();
-//                    }
-//                }
-//            });
-//
-//            view.findViewById(R.id.textCancel).setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    dialogAddURL.dismiss();
-//                }
-//            });
-//        }
-//        dialogAddURL.show();
     }
 
     @Override
@@ -771,3 +735,46 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
     }
 
 }
+
+
+// CUSTOM ALERT DIALOG
+//        if (dialogAddURL == null) {
+//            AlertDialog.Builder builder = new AlertDialog.Builder(CreateNoteActivity.this);
+//            View view = LayoutInflater.from(this).inflate(
+//                    R.layout.layout_add_url,
+//                    findViewById(R.id.layoutAddUrlContainer)
+//            );
+//
+//            builder.setView(view);
+//
+//            dialogAddURL = builder.create();
+//            if (dialogAddURL.getWindow() != null) {
+//                dialogAddURL.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+//            }
+//
+//            final EditText inputURL = view.findViewById(R.id.inputUrl);
+//            inputURL.requestFocus();
+//
+//            view.findViewById(R.id.textAdd).setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    if (inputURL.getText().toString().trim().isEmpty()) {
+//                        Toast.makeText(CreateNoteActivity.this, "Enter URL", Toast.LENGTH_SHORT).show();
+//                    } else if (!Patterns.WEB_URL.matcher(inputURL.getText().toString()).matches()) {
+//                        Toast.makeText(CreateNoteActivity.this, "Enter valid url", Toast.LENGTH_SHORT).show();
+//                    } else {
+//                        binding.textWebURL.setText(inputURL.getText().toString());
+//                        binding.layoutWebURL.setVisibility(View.VISIBLE);
+//                        dialogAddURL.dismiss();
+//                    }
+//                }
+//            });
+//
+//            view.findViewById(R.id.textCancel).setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    dialogAddURL.dismiss();
+//                }
+//            });
+//        }
+//        dialogAddURL.show();

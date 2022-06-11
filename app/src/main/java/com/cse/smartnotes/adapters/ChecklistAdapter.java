@@ -1,11 +1,9 @@
 package com.cse.smartnotes.adapters;
 
-import android.content.Context;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -20,8 +18,8 @@ import java.util.List;
 
 public class ChecklistAdapter extends RecyclerView.Adapter<ChecklistAdapter.ChecklistViewHolder> {
 
-    private List<CheckList> checkLists;
-    private ChecklistListener checklistListener;
+    private final List<CheckList> checkLists;
+    private final ChecklistListener checklistListener;
 
     public ChecklistAdapter(List<CheckList> checkLists, ChecklistListener checklistListener) {
         this.checkLists = checkLists;

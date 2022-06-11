@@ -13,10 +13,10 @@ import com.cse.smartnotes.entities.Note;
 @Database(entities = {Note.class, CheckList.class}, version = 1, exportSchema = false)
 public abstract class NotesDatabase extends RoomDatabase {
 
-    private static  NotesDatabase notesDatabase;
+    private static NotesDatabase notesDatabase;
 
-    public static synchronized NotesDatabase getDatabase(Context context){
-        if(notesDatabase == null){
+    public static synchronized NotesDatabase getDatabase(Context context) {
+        if (notesDatabase == null) {
             notesDatabase = Room.databaseBuilder(
                     context,
                     NotesDatabase.class,

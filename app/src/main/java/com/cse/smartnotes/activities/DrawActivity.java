@@ -132,17 +132,6 @@ public class DrawActivity extends AppCompatActivity {
 
     private void saveImage() throws IOException {
 
-//        File file = new File(fileName);
-//        Bitmap bitmap = signatureView.getSignatureBitmap();
-//        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-//        bitmap.compress(Bitmap.CompressFormat.PNG, 0, bos);
-//        byte[] bitmapData = bos.toByteArray();
-//        FileOutputStream fos = new FileOutputStream(file);
-//        fos.write(bitmapData);
-//        fos.flush();
-//        fos.close();
-
-
         boolean saved;
         Bitmap bitmap = signatureView.getSignatureBitmap();
         OutputStream fos;

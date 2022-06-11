@@ -21,7 +21,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.cse.smartnotes.R;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.mlkit.vision.common.InputImage;
@@ -33,8 +32,8 @@ import com.google.mlkit.vision.text.TextRecognizerOptions;
 
 public class ScannerActivity extends AppCompatActivity {
 
-    static final int REQUEST_IMAGE_CAPTURE = 1;
     public static final int REQUEST_CODE_SAVE_IMAGE_FROM_TEXT = 33;
+    static final int REQUEST_IMAGE_CAPTURE = 1;
     private ImageView captureIV;
     private Button snapBtn, detectBtn;
     private View backBtn;
@@ -53,28 +52,20 @@ public class ScannerActivity extends AppCompatActivity {
         detectBtn = findViewById(R.id.detectBtn);
         backBtn = findViewById(R.id.scanBack);
 
-        detectBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                detectText();
-            }
-        });
+        detectBtn.setOnClickListener(v -> detectText());
 
-        snapBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (checkPermission()) {
-                    captureImage();
-                } else {
-                    requestPermission();
-                }
+        snapBtn.setOnClickListener(v -> {
+            if (checkPermission()) {
+                captureImage();
+            } else {
+                requestPermission();
             }
         });
 
         backBtn.setOnClickListener(view -> {
             onBackPressed();
         });
-        if(!isDetectable){
+        if (!isDetectable) {
             detectBtn.setVisibility(View.GONE);
         }
     }
@@ -122,9 +113,9 @@ public class ScannerActivity extends AppCompatActivity {
             detectBtn.setVisibility(View.VISIBLE);
         }
 
-        if(requestCode==REQUEST_CODE_SAVE_IMAGE_FROM_TEXT && resultCode == RESULT_OK){
+        if (requestCode == REQUEST_CODE_SAVE_IMAGE_FROM_TEXT && resultCode == RESULT_OK) {
             Intent intent = new Intent();
-            setResult(Activity.RESULT_OK,intent);
+            setResult(Activity.RESULT_OK, intent);
             finish();
         }
     }
@@ -151,21 +142,16 @@ public class ScannerActivity extends AppCompatActivity {
                         capturedString = blockText;
                     }
                 }
-                if(capturedString==""){
+                if (capturedString == "") {
                     Toast.makeText(ScannerActivity.this, "Text Not Found In Image!", Toast.LENGTH_LONG).show();
                     snapBtn.setText("Retake Image");
-                }else {
+                } else {
                     Intent intent = new Intent(ScannerActivity.this, CreateNoteActivity.class);
                     intent.putExtra("capturedForNote", capturedString);
                     startActivityForResult(intent, REQUEST_CODE_SAVE_IMAGE_FROM_TEXT);
                 }
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(ScannerActivity.this, "Failed to detect text from image!", Toast.LENGTH_SHORT).show();
-            }
-        });
+        }).addOnFailureListener(e -> Toast.makeText(ScannerActivity.this, "Failed to detect text from image!", Toast.LENGTH_SHORT).show());
 
     }
 }

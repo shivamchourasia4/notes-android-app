@@ -1,6 +1,5 @@
 <resources>
-    <string name="app_name">Smart Notes</string>
-    <string name="my_notes">My Notes</string>
+    <string name="app_name">Notes</string>
     <string name="search_notes">Search Your Notes...</string>
     <string name="note_title">Note Title</string>
     <string name="note_subtitle">Note Subtitle</string>

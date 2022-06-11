@@ -24,46 +24,45 @@
         android:id="@+id/imageView"
         android:layout_width="293dp"
         android:layout_height="291dp"
+        android:background="@drawable/background_search"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.173"
-        app:srcCompat="@drawable/ic_secondary_image"
-        android:background="@drawable/background_search"
-        />
+        app:srcCompat="@drawable/ic_secondary_image" />
 
 
     <Button
         android:id="@+id/snapBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="80dp"
+        android:background="@drawable/background_button"
+        android:text="Snap"
+        android:textAllCaps="false"
+        app:backgroundTint="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintVertical_bias="0"
-        android:layout_margin="80dp"
-        android:text="Snap"
-        android:textAllCaps="false"
-        android:background="@drawable/background_button"
-        app:backgroundTint="@color/colorAccent"/>
+        app:layout_constraintVertical_bias="0" />
 
     <Button
         android:id="@+id/detectBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="80dp"
+        android:background="@drawable/background_button"
+        android:text="Detect Text From Image"
+        android:textAllCaps="false"
+        app:backgroundTint="@color/craneRed"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/snapBtn"
-        app:layout_constraintVertical_bias="0"
-        android:background="@drawable/background_button"
-        android:layout_margin="80dp"
-        android:text="Detect Text From Image"
-        android:textAllCaps="false"
-        app:backgroundTint="@color/craneRed"/>
+        app:layout_constraintVertical_bias="0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

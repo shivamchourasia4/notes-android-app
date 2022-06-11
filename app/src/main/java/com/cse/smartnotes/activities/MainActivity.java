@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // View Binding
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -59,12 +61,14 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
             intent.putExtra("addChecklist", true);
             startActivityForResult(intent, REQUEST_CODE_ADD_NOTE);
         });
+
         // Quick Action Draw
         View drawAction = quickActions.findViewById(R.id.draw);
         drawAction.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, DrawActivity.class);
             startActivity(intent);
         });
+
         // Quick Actions ML Scanner
         View textScan = quickActions.findViewById(R.id.imageToText);
         textScan.setOnClickListener(view -> {
@@ -79,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
             startActivityForResult(intent, REQUEST_CODE_ADD_NOTE);
         });
 
+        // Adapter
         noteList = new ArrayList<>();
         notesAdapter = new NotesAdapter(noteList, this);
         binding.notesRecyclerView.setAdapter(notesAdapter);

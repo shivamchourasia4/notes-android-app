@@ -15,4 +15,5 @@
     <string name="delete_note">Delete Note</string>
     <string name="are_you_sure">Are You Sure ?</string>
     <string name="reminder">Add Reminder</string>
+    <string name="add_checklists">Add Checklists</string>
 </resources>

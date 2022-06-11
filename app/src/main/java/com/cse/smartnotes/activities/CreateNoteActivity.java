@@ -35,23 +35,29 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cse.smartnotes.R;
+import com.cse.smartnotes.adapters.ChecklistAdapter;
 import com.cse.smartnotes.broadcast.ReminderBroadcast;
 import com.cse.smartnotes.database.NotesDatabase;
 import com.cse.smartnotes.databinding.ActivityCreateNoteBinding;
+import com.cse.smartnotes.entities.CheckList;
 import com.cse.smartnotes.entities.Note;
+import com.cse.smartnotes.listeners.ChecklistListener;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
-public class CreateNoteActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class CreateNoteActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, ChecklistListener {
 
     public static final int SELECT_PICTURE = 200;
     private static final int REQUEST_CODE_STORAGE_PERMISSION = 1;
@@ -63,6 +69,9 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
     private TimePickerDialog tpd;
     private DatePickerDialog dpd;
     private Note alreadyAvailableNote;
+    private List<CheckList> checkList;
+    private ChecklistAdapter checklistAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +84,7 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
         });
 
         binding.textDateTime.setText(
-                new SimpleDateFormat("dd MMMM, yyyy", Locale.getDefault())
+                new SimpleDateFormat("dd MMMM yyyy, hh:mm a", Locale.getDefault())
                         .format(new Date())
         );
 
@@ -85,13 +94,26 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
         selectedImagePath = "";
         setTextHintColorLight();
 
+
+        binding.checklistRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        checkList = new ArrayList<>();
+
+        checklistAdapter = new ChecklistAdapter(checkList, this);
+        binding.checklistRecyclerView.setAdapter(checklistAdapter);
+
+
         if (getIntent().getBooleanExtra("isViewOrUpdate", false)) {
             alreadyAvailableNote = (Note) getIntent().getSerializableExtra("note");
             setViewOrUpdateNote();
+            getChecklists();
         }
 
         if (getIntent().getStringExtra("capturedForNote") != null) {
             binding.inputNote.setText(getIntent().getStringExtra("capturedForNote"));
+        }
+
+        if (getIntent().getBooleanExtra("addChecklist", false)) {
+            showAddChecklistContainer();
         }
 
         binding.removeWebURL.setOnClickListener(view -> {
@@ -116,8 +138,8 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
     }
 
     private void showKeyboard() {
-        InputMethodManager imm = (InputMethodManager)getSystemService(this.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,InputMethodManager.HIDE_IMPLICIT_ONLY);
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
     }
 
     @Override
@@ -194,13 +216,22 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
         class SaveNoteTask extends AsyncTask<Void, Void, Void> {
             @Override
             protected Void doInBackground(Void... voids) {
-                NotesDatabase.getDatabase(getApplicationContext()).noteDao().insertNote(note);
+                Long newNoteId = NotesDatabase.getDatabase(getApplicationContext()).noteDao().insertNote(note);
+                for (CheckList items : checkList) {
+                    if (items.getChecklistContent().length() > 0) {
+                        if (alreadyAvailableNote == null) {
+                            items.setOwnerNoteId(newNoteId + "");
+                        }
+                        NotesDatabase.getDatabase(getApplication()).noteDao().insertChecklistInNote(items);
+                    }
+                }
                 return null;
             }
 
             @Override
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
+
                 Intent intent = new Intent();
                 setResult(RESULT_OK, intent);
                 finish();
@@ -312,6 +343,11 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
             }
         });
 
+        layoutTools.findViewById(R.id.layoutAddChecklist).setOnClickListener(view -> {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            showAddChecklistContainer();
+        });
+
         layoutTools.findViewById(R.id.layoutAddUrl).setOnClickListener(view -> {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             showAddURLDialog();
@@ -355,6 +391,7 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
 
         }
     }
+
 
     private void setTextHintColorDark() {
         binding.inputNoteTitle.setHintTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorHintDark));
@@ -464,6 +501,9 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
 
                         @Override
                         protected Void doInBackground(Void... voids) {
+                            for (CheckList items : checkList) {
+                                NotesDatabase.getDatabase(getApplicationContext()).noteDao().deleteChecklistFromNote(items);
+                            }
                             NotesDatabase.getDatabase(getApplicationContext()).noteDao().deleteNote(alreadyAvailableNote);
                             return null;
                         }
@@ -596,7 +636,7 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
         // Specify the type of input expected.
         inputURL.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
         alertDialogBuilder
-                .setView(inputURL, 50, 0,50, 0)
+                .setView(inputURL, 50, 0, 50, 0)
                 .setCancelable(false)
                 .setIcon(R.drawable.ic_baseline_web)
                 .setPositiveButton("Add", (dialog, id) -> {
@@ -660,4 +700,74 @@ public class CreateNoteActivity extends AppCompatActivity implements DatePickerD
 //        }
 //        dialogAddURL.show();
     }
+
+    @Override
+    public void onChecklistClicked(CheckList checkList, String content) {
+        checkList.setChecklistContent(content);
+    }
+
+    @Override
+    public void onUnmarkedClicked(CheckList checkList) {
+        checkList.setChecked(true);
+    }
+
+    @Override
+    public void onMarkedClicked(CheckList checkList) {
+        checkList.setChecked(false);
+    }
+
+    @Override
+    public void onChecklistDeleteClicked(CheckList checkListItem, int position) {
+        deleteChecklist(checkListItem);
+        checkList.remove(position);
+        checklistAdapter.notifyItemRemoved(position);
+        checklistAdapter.notifyItemRangeChanged(position, checkList.size());
+
+    }
+
+    private void deleteChecklist(CheckList checkListItem) {
+        class deleteChecklistTask extends AsyncTask<Void, Void, List<CheckList>> {
+            @Override
+            protected List<CheckList> doInBackground(Void... voids) {
+                NotesDatabase.getDatabase(getApplicationContext()).noteDao().deleteChecklistFromNote(checkListItem);
+                return null;
+            }
+        }
+        new deleteChecklistTask().execute();
+    }
+
+
+    private void showAddChecklistContainer() {
+
+        CheckList newCheckList = new CheckList();
+        newCheckList.setChecked(false);
+        newCheckList.setChecklistContent("");
+        newCheckList.setDateTime(binding.textDateTime.getText().toString());
+        if (alreadyAvailableNote != null)
+            newCheckList.setOwnerNoteId(alreadyAvailableNote.getId() + "");
+        checkList.add(newCheckList);
+        checklistAdapter.notifyDataSetChanged();
+//         for fast performance
+//        checklistAdapter.notifyItemInserted(checkList.size() - 1);
+    }
+
+    public void getChecklists() {
+        class GetChecklistTask extends AsyncTask<Void, Void, List<CheckList>> {
+
+            @Override
+            protected List<CheckList> doInBackground(Void... voids) {
+                return NotesDatabase.getDatabase(getApplicationContext()).noteDao().getChecklistOfNote(alreadyAvailableNote.getId() + "");
+            }
+
+            @Override
+            protected void onPostExecute(List<CheckList> checkListItems) {
+                super.onPostExecute(checkListItems);
+                checkList.addAll(checkListItems);
+                checklistAdapter.notifyDataSetChanged();
+            }
+        }
+
+        new GetChecklistTask().execute();
+    }
+
 }

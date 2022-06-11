@@ -11,7 +11,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -56,7 +55,9 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
         View quickActions = findViewById(R.id.layoutQuickActions);
         View nav = quickActions.findViewById(R.id.checkLists);
         nav.setOnClickListener(view -> {
-            Toast.makeText(this, "Clicked!!!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MainActivity.this, CreateNoteActivity.class);
+            intent.putExtra("addChecklist", true);
+            startActivityForResult(intent, REQUEST_CODE_ADD_NOTE);
         });
         // Quick Action Draw
         View drawAction = quickActions.findViewById(R.id.draw);
@@ -170,9 +171,6 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
                         notesAdapter.notifyItemChanged(noteClickedPosition);
                     }
                 }
-
-
-
 
                  /* if (noteList.size() == 0) {
                     noteList.addAll(notes);

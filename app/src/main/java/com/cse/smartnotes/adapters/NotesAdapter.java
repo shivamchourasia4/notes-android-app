@@ -26,10 +26,10 @@ import java.util.TimerTask;
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder> {
 
-    private List<Note> notes;
     private final NotesListener notesListener;
-    private Timer timer;
     private final List<Note> notesSource;
+    private List<Note> notes;
+    private Timer timer;
 
     public NotesAdapter(List<Note> notes, NotesListener notesListener) {
         this.notes = notes;
@@ -51,12 +51,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
     @Override
     public void onBindViewHolder(@NonNull NoteViewHolder holder, int position) {
         holder.setNote(notes.get(position));
-        holder.layoutNote.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                notesListener.onNoteClicked(notes.get(position), position);
-            }
-        });
+        holder.layoutNote.setOnClickListener(view -> notesListener.onNoteClicked(notes.get(position), position));
     }
 
     @Override

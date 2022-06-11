@@ -38,12 +38,9 @@ public class SpeechActivity extends AppCompatActivity {
         sayBtn = findViewById(R.id.sayBtn);
         saveBtn = findViewById(R.id.saveTextFromSpeech);
         backBtn = findViewById(R.id.speechBack);
-        sayBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        sayBtn.setOnClickListener(view -> {
 //                Toast.makeText(SpeechActivity.this, "Working!", Toast.LENGTH_SHORT).show();
-                getSpeechResult();
-            }
+            getSpeechResult();
         });
 
         backBtn.setOnClickListener(view -> onBackPressed());

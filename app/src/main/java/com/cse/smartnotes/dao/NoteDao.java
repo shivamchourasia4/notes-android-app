@@ -6,6 +6,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
+import com.cse.smartnotes.entities.CheckList;
 import com.cse.smartnotes.entities.Note;
 
 import java.util.List;
@@ -17,9 +18,17 @@ public interface NoteDao {
     List<Note> getAllNotes();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void  insertNote(Note note);
+    long insertNote(Note note);
 
     @Delete
-    void  deleteNote(Note note);
+    void deleteNote(Note note);
 
+    @Query("SELECT * FROM checklist WHERE ownerNoteId IS :ownerNoteId")
+    List<CheckList> getChecklistOfNote(String ownerNoteId);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertChecklistInNote(CheckList checkLists);
+
+    @Delete
+    void deleteChecklistFromNote(CheckList checkList);
 }

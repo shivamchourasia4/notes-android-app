@@ -139,6 +139,20 @@
                 app:layout_constraintEnd_toEndOf="@id/imageNote"
                 app:layout_constraintTop_toTopOf="@id/imageNote" />
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/checklistRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:clipToPadding="true"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
+                android:nestedScrollingEnabled="false"
+                app:layout_constraintBottom_toBottomOf="@id/layoutWebURL"
+                app:layout_constraintTop_toBottomOf="@id/imageNote"
+                />
+
             <LinearLayout
                 android:id="@+id/layoutWebURL"
                 android:layout_width="match_parent"
@@ -149,7 +163,7 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@+id/imageNote">
+                app:layout_constraintTop_toBottomOf="@+id/checklistRecyclerView">
 
                 <TextView
                     android:id="@+id/textWebURL"
@@ -168,8 +182,6 @@
                     android:contentDescription="@string/app_name"
                     android:src="@drawable/ic_baseline_delete"
                     android:tint="@color/craneRed" />
-
-
             </LinearLayout>
 
             <EditText

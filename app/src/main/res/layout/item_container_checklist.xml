@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layoutChecklist"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/_12sdp"
+    android:layout_marginTop="@dimen/_4sdp"
+    android:layout_marginStart="@dimen/_12sdp"
+    android:layout_marginBottom="@dimen/_8sdp"
+    android:layout_marginEnd="@dimen/_12sdp"
+    android:gravity="center_vertical"
+    android:background="@drawable/background_note"
+    android:elevation="@dimen/_4sdp"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/unmarkedChecklist"
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="@dimen/_20sdp"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/ic_baseline_check_box_outline_blank_24"
+        android:tint="@color/colorSecondary" />
+
+    <ImageView
+        android:id="@+id/markedChecklist"
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="@dimen/_20sdp"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/ic_baseline_check_box"
+        android:tint="@color/colorSecondary"
+        android:visibility="gone" />
+
+    <EditText
+        android:id="@+id/textCheckList"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="@dimen/_2sdp"
+        android:hint="Add Checklist Item..."
+        android:textColorHint="@color/colorHint"
+        android:fontFamily="@font/raleway_regular"
+        android:background="@null"
+        android:textColor="@color/black"
+        android:imeOptions="actionDone"
+        android:importantForAutofill="no"
+        android:includeFontPadding="false"
+        android:textSize="@dimen/_16ssp" />
+
+    <ImageView
+        android:id="@+id/removeChecklist"
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="@dimen/_20sdp"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/ic_baseline_delete"
+        android:tint="@color/craneRed" />
+</LinearLayout>

@@ -1,4 +1,4 @@
-package com.cse.smartnotes.activities;
+package com.cse.notes.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -37,14 +37,14 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.cse.smartnotes.R;
-import com.cse.smartnotes.adapters.ChecklistAdapter;
-import com.cse.smartnotes.broadcast.ReminderBroadcast;
-import com.cse.smartnotes.database.NotesDatabase;
-import com.cse.smartnotes.databinding.ActivityCreateNoteBinding;
-import com.cse.smartnotes.entities.CheckList;
-import com.cse.smartnotes.entities.Note;
-import com.cse.smartnotes.listeners.ChecklistListener;
+import com.cse.notes.R;
+import com.cse.notes.adapters.ChecklistAdapter;
+import com.cse.notes.broadcast.ReminderBroadcast;
+import com.cse.notes.database.NotesDatabase;
+import com.cse.notes.databinding.ActivityCreateNoteBinding;
+import com.cse.notes.entities.CheckList;
+import com.cse.notes.entities.Note;
+import com.cse.notes.listeners.ChecklistListener;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;

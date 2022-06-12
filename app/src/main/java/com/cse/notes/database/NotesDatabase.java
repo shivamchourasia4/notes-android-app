@@ -1,4 +1,4 @@
-package com.cse.smartnotes.database;
+package com.cse.notes.database;
 
 import android.content.Context;
 
@@ -6,9 +6,9 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import com.cse.smartnotes.dao.NoteDao;
-import com.cse.smartnotes.entities.CheckList;
-import com.cse.smartnotes.entities.Note;
+import com.cse.notes.dao.NoteDao;
+import com.cse.notes.entities.CheckList;
+import com.cse.notes.entities.Note;
 
 @Database(entities = {Note.class, CheckList.class}, version = 1, exportSchema = false)
 public abstract class NotesDatabase extends RoomDatabase {

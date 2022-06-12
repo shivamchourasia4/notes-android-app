@@ -1,4 +1,4 @@
-package com.cse.smartnotes;
+package com.cse.notes;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package com.cse.smartnotes.entities;
+package com.cse.notes.entities;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;

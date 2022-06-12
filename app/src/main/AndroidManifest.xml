@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.cse.smartnotes">
+    package="com.cse.notes">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -17,23 +17,23 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartNotes">
         <activity
-            android:name=".activities.CreateNoteActivity"
+            android:name="com.cse.notes.activities.CreateNoteActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".activities.ScannerActivity"
+            android:name="com.cse.notes.activities.ScannerActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".activities.SpeechActivity"
+            android:name="com.cse.notes.activities.SpeechActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".activities.DrawActivity"
+            android:name="com.cse.notes.activities.DrawActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".activities.SplashScreenActivity"
+            android:name="com.cse.notes.activities.SplashScreenActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -41,7 +41,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.MainActivity"
+            android:name="com.cse.notes.activities.MainActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden">
         </activity> <!-- <receiver android:name="com.allyants.notifyme.NotificationPublisher"/> -->
@@ -52,7 +52,7 @@
         <!-- </intent-filter> -->
         <!-- </receiver> -->
         <receiver
-            android:name=".broadcast.ReminderBroadcast"
+            android:name="com.cse.notes.broadcast.ReminderBroadcast"
             android:enabled="true" />
     </application>
 

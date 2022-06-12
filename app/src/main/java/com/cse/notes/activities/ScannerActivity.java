@@ -1,4 +1,4 @@
-package com.cse.smartnotes.activities;
+package com.cse.notes.activities;
 
 import android.Manifest;
 import android.app.Activity;
@@ -20,7 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.cse.smartnotes.R;
+import com.cse.notes.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.mlkit.vision.common.InputImage;

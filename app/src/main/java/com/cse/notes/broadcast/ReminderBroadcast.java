@@ -1,4 +1,4 @@
-package com.cse.smartnotes.broadcast;
+package com.cse.notes.broadcast;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -8,7 +8,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
-import com.cse.smartnotes.R;
+import com.cse.notes.R;
 
 public class ReminderBroadcast extends BroadcastReceiver {
     @Override

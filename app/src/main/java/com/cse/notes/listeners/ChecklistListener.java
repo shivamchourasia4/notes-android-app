@@ -1,6 +1,6 @@
-package com.cse.smartnotes.listeners;
+package com.cse.notes.listeners;
 
-import com.cse.smartnotes.entities.CheckList;
+import com.cse.notes.entities.CheckList;
 
 public interface ChecklistListener {
     void onChecklistClicked(CheckList checkList, String content);

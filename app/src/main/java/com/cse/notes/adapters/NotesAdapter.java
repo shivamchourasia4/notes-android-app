@@ -1,4 +1,4 @@
-package com.cse.smartnotes.adapters;
+package com.cse.notes.adapters;
 
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -14,9 +14,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.cse.smartnotes.R;
-import com.cse.smartnotes.entities.Note;
-import com.cse.smartnotes.listeners.NotesListener;
+import com.cse.notes.R;
+import com.cse.notes.entities.Note;
+import com.cse.notes.listeners.NotesListener;
 import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.cse.smartnotes.activities;
+package com.cse.notes.activities;
 
 import android.Manifest;
 import android.content.ContentResolver;
@@ -18,7 +18,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import com.cse.smartnotes.R;
+import com.cse.notes.R;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;

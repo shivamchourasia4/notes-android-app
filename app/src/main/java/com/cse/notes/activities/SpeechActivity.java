@@ -1,4 +1,4 @@
-package com.cse.smartnotes.activities;
+package com.cse.notes.activities;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -13,7 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.cse.smartnotes.R;
+import com.cse.notes.R;
 
 import java.util.ArrayList;
 import java.util.Locale;

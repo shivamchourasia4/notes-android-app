@@ -1,4 +1,4 @@
-package com.cse.smartnotes.activities;
+package com.cse.notes.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,12 +16,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import com.cse.smartnotes.R;
-import com.cse.smartnotes.adapters.NotesAdapter;
-import com.cse.smartnotes.database.NotesDatabase;
-import com.cse.smartnotes.databinding.ActivityMainBinding;
-import com.cse.smartnotes.entities.Note;
-import com.cse.smartnotes.listeners.NotesListener;
+import com.cse.notes.R;
+import com.cse.notes.adapters.NotesAdapter;
+import com.cse.notes.database.NotesDatabase;
+import com.cse.notes.databinding.ActivityMainBinding;
+import com.cse.notes.entities.Note;
+import com.cse.notes.listeners.NotesListener;
 
 import java.util.ArrayList;
 import java.util.List;

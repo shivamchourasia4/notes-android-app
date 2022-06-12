@@ -1,4 +1,4 @@
-package com.cse.smartnotes.adapters;
+package com.cse.notes.adapters;
 
 import android.graphics.Paint;
 import android.view.LayoutInflater;
@@ -10,9 +10,9 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.cse.smartnotes.R;
-import com.cse.smartnotes.entities.CheckList;
-import com.cse.smartnotes.listeners.ChecklistListener;
+import com.cse.notes.R;
+import com.cse.notes.entities.CheckList;
+import com.cse.notes.listeners.ChecklistListener;
 
 import java.util.List;
 

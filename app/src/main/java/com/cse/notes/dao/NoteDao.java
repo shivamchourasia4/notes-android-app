@@ -1,4 +1,4 @@
-package com.cse.smartnotes.dao;
+package com.cse.notes.dao;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -6,8 +6,8 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.cse.smartnotes.entities.CheckList;
-import com.cse.smartnotes.entities.Note;
+import com.cse.notes.entities.CheckList;
+import com.cse.notes.entities.Note;
 
 import java.util.List;
 

@@ -7,7 +7,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.cse.smartnotes"
+        applicationId "com.cse.notes"
         minSdkVersion 26
         targetSdkVersion 31
         versionCode 1

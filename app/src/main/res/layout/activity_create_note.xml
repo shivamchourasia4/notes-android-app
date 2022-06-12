@@ -58,7 +58,7 @@
                 android:background="@null"
                 android:fontFamily="@font/raleway_bold"
                 android:hint="@string/note_title"
-                android:imeOptions="actionDone"
+                android:imeOptions="actionNext"
                 android:importantForAutofill="no"
                 android:includeFontPadding="false"
                 android:inputType="textCapSentences|text"
@@ -91,9 +91,10 @@
                 android:background="@null"
                 android:fontFamily="@font/raleway_light"
                 android:hint="@string/note_subtitle"
+                android:imeOptions="actionNext"
                 android:importantForAutofill="no"
                 android:includeFontPadding="false"
-                android:inputType="textMultiLine|textCapSentences"
+                android:inputType="text|textCapSentences"
                 android:textColor="@color/colorTernary"
                 android:textColorHint="@color/colorHint"
                 android:textSize="@dimen/_16sdp"
@@ -149,7 +150,7 @@
                 android:nestedScrollingEnabled="false"
                 android:paddingStart="0dp"
                 android:paddingEnd="0dp"
-                app:layout_constraintBottom_toBottomOf="@id/layoutWebURL"
+                app:layout_constraintBottom_toTopOf="@id/layoutWebURL"
                 app:layout_constraintTop_toBottomOf="@id/imageNote" />
 
             <LinearLayout

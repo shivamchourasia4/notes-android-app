@@ -39,7 +39,6 @@ public class ChecklistAdapter extends RecyclerView.Adapter<ChecklistAdapter.Chec
     @Override
     public void onBindViewHolder(@NonNull ChecklistViewHolder holder, int position) {
         holder.setChecklist(checkLists.get(position));
-        holder.checklistText.requestFocus();
         holder.checklistText.setOnFocusChangeListener((view, hasFocus) -> {
             if (!hasFocus) {
                 checklistListener.onChecklistClicked(checkLists.get(position), holder.checklistText.getText().toString());
